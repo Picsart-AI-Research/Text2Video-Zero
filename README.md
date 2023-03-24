@@ -3,15 +3,13 @@
 This repository is the official implementation of [Text2Video-Zero](https://www.dropbox.com/s/ycudlbby9flehyq/Text2Video-Zero.pdf?dl=0).
 
 
-**[Text2Video-Zero: Text-to-Image Diffusion Models are Zero-Shot Video Generators]()**
+**[Text2Video-Zero: Text-to-Image Diffusion Models are Zero-Shot Video Generators](https://www.dropbox.com/s/ycudlbby9flehyq/Text2Video-Zero.pdf?dl=0)**
 </br>
-[Levon Khachatryan](),
-[Andranik Movsisyan](),
-[Vahram Tadevosyan](),
-[Roberto Henschel](),
-[Zhangyang Wang](https://www.ece.utexas.edu/people/faculty/atlas-wang),
-[Shant Navasardyan](),
-[Humphrey Shi](https://www.humphreyshi.com)
+Levon Khachatryan,
+Andranik Movsisyan,
+Vahram Tadevosyan,
+Roberto Henschel,
+[Zhangyang Wang](https://www.ece.utexas.edu/people/faculty/atlas-wang), Shant Navasardyan, [Humphrey Shi](https://www.humphreyshi.com)
 </br>
 
 [Paper](https://www.dropbox.com/s/ycudlbby9flehyq/Text2Video-Zero.pdf?dl=0) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) 
