@@ -346,9 +346,9 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 
 <table class="center">
 <tr>
-  <td><img src="__assets__/db/anime_style.gif" raw=true><img src="__assets__/db/anime_edge.gif"></td>
-  <td><img src="__assets__/db/arcane_style.gif" raw=true><img src="__assets__/db/arcane_edge.gif"></td>
-  <td><img src="__assets__/db/gta-5_man_style.gif" raw=true><img src="__assets__/db/gta-5_man_edge.gif"></td>
+  <td><img src="__assets__/github/results/canny_db/anime_style.gif" raw=true><img src="__assets__/github/results/canny_db/anime_edge.gif"></td>
+  <td><img src="__assets__/github/results/canny_db/arcane_style.gif" raw=true><img src="__assets__/github/results/canny_db/arcane_edge.gif"></td>
+  <td><img src="__assets__/github/results/canny_db/gta-5_man_style.gif" raw=true><img src="__assets__/github/results/canny_db/gta-5_man_edge.gif"></td>
   <td><img src="__assets__/github/results/canny_db/img_bot_right.gif" raw=true><img src="__assets__/github/results/canny_db/edge_bot_right.gif"></td>
 </tr>
 <tr>
