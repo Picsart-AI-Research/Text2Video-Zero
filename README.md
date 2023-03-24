@@ -1,9 +1,9 @@
 # Text2Video-Zero
 
-This repository is the official implementation of [Text2Video-Zero](https://www.dropbox.com/s/ycudlbby9flehyq/Text2Video-Zero.pdf?dl=0).
+This repository is the official implementation of [Text2Video-Zero](https://arxiv.org/abs/2303.13439).
 
 
-**[Text2Video-Zero: Text-to-Image Diffusion Models are Zero-Shot Video Generators](https://www.dropbox.com/s/ycudlbby9flehyq/Text2Video-Zero.pdf?dl=0)**
+**[Text2Video-Zero: Text-to-Image Diffusion Models are Zero-Shot Video Generators](https://arxiv.org/abs/2303.13439)**
 </br>
 Levon Khachatryan,
 Andranik Movsisyan,
@@ -12,7 +12,7 @@ Roberto Henschel,
 [Zhangyang Wang](https://www.ece.utexas.edu/people/faculty/atlas-wang), Shant Navasardyan, [Humphrey Shi](https://www.humphreyshi.com)
 </br>
 
-[Paper](https://www.dropbox.com/s/ycudlbby9flehyq/Text2Video-Zero.pdf?dl=0) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) 
+[Paper](https://arxiv.org/abs/2303.13439) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) 
 
 <!---
 [comment]: #  [Project Page](https://picsart-ai-research.github.io/Text2Video-Zero) | [arXiv]() | [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)]()  
@@ -393,7 +393,7 @@ If you use our work in your research, please cite our publication:
 @article{text2video-zero,
     title={Text2Video-Zero: Text-to-Image Diffusion Models are Zero-Shot Video Generators},
     author={Khachatryan, Levon and Movsisyan, Andranik and Tadevosyan, Vahram and Henschel, Roberto and Wang, Zhangyang and Navasardyan, Shant and Shi, Humphrey},
-    journal={arXiv preprint},
+    journal={arXiv preprint arXiv:2303.13439},
     year={2023}
 }
 ```
