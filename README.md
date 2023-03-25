@@ -25,6 +25,11 @@ Roberto Henschel,
     Results are temporally consistent and follow closely the guidance and textual prompts.</em>
 </p>
 
+## News
+
+* [03/23/2023] Paper [Text2Video-Zero](https://arxiv.org/abs/2303.13439) released
+
+
 ## Code
 Will be released soon!
 
