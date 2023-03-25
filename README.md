@@ -27,8 +27,8 @@ Roberto Henschel,
 
 ## News
 
-* [03/23/2023] Paper [Text2Video-Zero](https://arxiv.org/abs/2303.13439) released
-
+* [03/23/2023] Paper [Text2Video-Zero](https://arxiv.org/abs/2303.13439) released!
+* [03/25/2023] The [first version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo (zero-shot text-to-video generation, Video Instruct Pix2Pix) released!
 
 ## Code
 Will be released soon!
