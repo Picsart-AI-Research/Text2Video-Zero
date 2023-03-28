@@ -236,10 +236,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/t2v/skii.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"A cat is running on the grass"</td>
-  <td width=25% style="text-align:center;">"A panda is playing guitar on times square</td>
-  <td width=25% style="text-align:center;">"A man is running in the snow"</td>
-  <td width=25% style="text-align:center;">"An astronaut is skiing down the hill"</td>
+  <td width=25% align="center">"A cat is running on the grass"</td>
+  <td width=25% align="center">"A panda is playing guitar on times square</td>
+  <td width=25% align="center">"A man is running in the snow"</td>
+  <td width=25% align="center">"An astronaut is skiing down the hill"</td>
 </tr>
 
 <tr>
@@ -249,10 +249,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/t2v/horse_galloping.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"A panda surfing on a wakeboard"</td>
-  <td width=25% style="text-align:center;">"A bear dancing on times square</td>
-  <td width=25% style="text-align:center;">"A man is riding a bicycle in the sunshine"</td>
-  <td width=25% style="text-align:center;">"A horse galloping on a street"</td>
+  <td width=25% align="center">"A panda surfing on a wakeboard"</td>
+  <td width=25% align="center">"A bear dancing on times square</td>
+  <td width=25% align="center">"A man is riding a bicycle in the sunshine"</td>
+  <td width=25% align="center">"A horse galloping on a street"</td>
 </tr>
 
 <tr>
@@ -262,10 +262,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/t2v/cat_walking.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"A tiger walking alone down the street"</td>
-  <td width=25% style="text-align:center;">"A panda surfing on a wakeboard</td>
-  <td width=25% style="text-align:center;">"A horse galloping on a street"</td>
-  <td width=25% style="text-align:center;">"A cute cat running in a beatiful meadow"</td>
+  <td width=25% align="center">"A tiger walking alone down the street"</td>
+  <td width=25% align="center">"A panda surfing on a wakeboard</td>
+  <td width=25% align="center">"A horse galloping on a street"</td>
+  <td width=25% align="center">"A cute cat running in a beatiful meadow"</td>
 </tr>
 
 
@@ -276,10 +276,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/t2v/astronaut.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"A horse galloping on a street"</td>
-  <td width=25% style="text-align:center;">"A panda walking alone down the street</td>
-  <td width=25% style="text-align:center;">"A dog is walking down the street"</td>
-  <td width=25% style="text-align:center;">"An astronaut is waving his hands on the moon"</td>
+  <td width=25% align="center">"A horse galloping on a street"</td>
+  <td width=25% align="center">"A panda walking alone down the street</td>
+  <td width=25% align="center">"A dog is walking down the street"</td>
+  <td width=25% align="center">"An astronaut is waving his hands on the moon"</td>
 </tr>
 
 
@@ -296,10 +296,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/pose2v/img_top_right.gif" raw=true><img src="__assets__/github/results/pose2v/pose_top_right.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"A bear dancing on the concrete"</td>
-  <td width=25% style="text-align:center;">"An alien dancing under a flying saucer</td>
-  <td width=25% style="text-align:center;">"A panda dancing in Antarctica"</td>
-  <td width=25% style="text-align:center;">"An astronaut dancing in the outer space"</td>
+  <td width=25% align="center">"A bear dancing on the concrete"</td>
+  <td width=25% align="center">"An alien dancing under a flying saucer</td>
+  <td width=25% align="center">"A panda dancing in Antarctica"</td>
+  <td width=25% align="center">"An astronaut dancing in the outer space"</td>
 
 </tr>
 </table>
@@ -316,10 +316,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/edge2v/mask.gif" raw=true><img src="__assets__/github/results/edge2v/mask_edge.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"White butterfly"</td>
-  <td width=25% style="text-align:center;">"Beautiful girl</td>
-    <td width=25% style="text-align:center;">"A jellyfish"</td>
-  <td width=25% style="text-align:center;">"beautiful girl halloween style"</td>
+  <td width=25% align="center">"White butterfly"</td>
+  <td width=25% align="center">"Beautiful girl</td>
+    <td width=25% align="center">"A jellyfish"</td>
+  <td width=25% align="center">"beautiful girl halloween style"</td>
 </tr>
 
 <tr>
@@ -329,10 +329,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/edge2v/dear.gif" raw=true><img src="__assets__/github/results/edge2v/dear_edge.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"Wild fox is walking"</td>
-  <td width=25% style="text-align:center;">"Oil painting of a beautiful girl close-up</td>
-    <td width=25% style="text-align:center;">"A santa claus"</td>
-  <td width=25% style="text-align:center;">"A deer"</td>
+  <td width=25% align="center">"Wild fox is walking"</td>
+  <td width=25% align="center">"Oil painting of a beautiful girl close-up</td>
+    <td width=25% align="center">"A santa claus"</td>
+  <td width=25% align="center">"A deer"</td>
 </tr>
 
 </table>
@@ -351,10 +351,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/canny_db/img_bot_right.gif" raw=true><img src="__assets__/github/results/canny_db/edge_bot_right.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"anime style"</td>
-  <td width=25% style="text-align:center;">"arcane style</td>
-    <td width=25% style="text-align:center;">"gta-5 man"</td>
-  <td width=25% style="text-align:center;">"avatar style"</td>
+  <td width=25% align="center">"anime style"</td>
+  <td width=25% align="center">"arcane style</td>
+    <td width=25% align="center">"gta-5 man"</td>
+  <td width=25% align="center">"avatar style"</td>
 </tr>
 
 </table>
@@ -369,9 +369,9 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/up_right.gif" raw=true><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/bot_right.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"Replace man with chimpanze"</td>
-  <td width=25% style="text-align:center;">"Make it Van Gogh Starry Night style"</td>
-    <td width=25% style="text-align:center;">"Make it Picasso style"</td>
+  <td width=25% align="center">"Replace man with chimpanze"</td>
+  <td width=25% align="center">"Make it Van Gogh Starry Night style"</td>
+    <td width=25% align="center">"Make it Picasso style"</td>
 </tr>
 
 <tr>
@@ -380,9 +380,9 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/up_right.gif" raw=true><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/bot_right.gif"></td>
 </tr>
 <tr>
-  <td width=25% style="text-align:center;">"Make it Expressionism style"</td>
-  <td width=25% style="text-align:center;">"Make it night"</td>
-    <td width=25% style="text-align:center;">"Make it autumn"</td>
+  <td width=25% align="center">"Make it Expressionism style"</td>
+  <td width=25% align="center">"Make it night"</td>
+    <td width=25% align="center">"Make it autumn"</td>
 </tr>
 </table>
 
