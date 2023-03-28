@@ -1,3 +1,6 @@
+
+
+
 # Text2Video-Zero
 
 This repository is the official implementation of [Text2Video-Zero](https://arxiv.org/abs/2303.13439).
@@ -12,11 +15,8 @@ Roberto Henschel,
 [Zhangyang Wang](https://www.ece.utexas.edu/people/faculty/atlas-wang), Shant Navasardyan, [Humphrey Shi](https://www.humphreyshi.com)
 </br>
 
-[Paper](https://arxiv.org/abs/2303.13439) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) | [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/PAIR/Text2Video-Zero)   
+[Paper](https://arxiv.org/abs/2303.13439) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) | [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/PAIR/Text2Video-Zero) 
 
-<!---
-[comment]: #  [Project Page](https://picsart-ai-research.github.io/Text2Video-Zero) | [arXiv]() | [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)]()  
---> 
 
 <p align="center">
 <img src="__assets__/github/teaser/teaser_final.png" width="800px"/>  
@@ -28,14 +28,14 @@ Roberto Henschel,
 ## News
 
 * [03/23/2023] Paper [Text2Video-Zero](https://arxiv.org/abs/2303.13439) released!
-* [03/25/2023] The [first version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo (zero-shot text-to-video generation, Video Instruct Pix2Pix) released!
+* [03/25/2023] The [first version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo (containing `zero-shot text-to-video generation` and  `Video Instruct Pix2Pix`) released!
+* [03/27/2023] The [full version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo released! Now also included: `text and pose conditional video generation`, `text and canny-edge conditional video generation`, and 
+`text, canny-edge and dreambooth conditional video generation`.
+* [03/28/2023] Code for all our generation methods released! We added a new low-memory setup. Minimum required GPU VRAM is currently **12 GB**. It will be further reduced in the upcoming releases. 
 
-## Code
-Will be released soon!
-
-
-<!---
 ## Setup
+
+
 
 
 ### Requirements
@@ -43,14 +43,22 @@ Will be released soon!
 ```shell
 pip install -r requirements.txt
 ```
-Installing [xformers](https://github.com/facebookresearch/xformers) is highly recommended for more efficiency and speed on GPUs. 
+<!--- Installing [xformers](https://github.com/facebookresearch/xformers) is highly recommended for more efficiency and speed on GPUs. --->
 
 ### Weights
 
+#### Text-To-Video with Pose Guidance
+
+Download the pose model weights used in [ControlNet](https://arxiv.org/abs/2302.05543):
+```shell
+wget -P annotator/ckpts https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/hand_pose_model.pth
+wget -P annotator/ckpts https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth
+```
 
 
+<!---
 #### Text-To-Video
-Any [Stable Diffusion](https://arxiv.org/abs/2112.10752) v1.5 model weights in huggingface format can be used and must be placed in `models/text-to-video`.
+Any [Stable Diffusion](https://arxiv.org/abs/2112.10752) v1.4 model weights in huggingface format can be used and must be placed in `models/text-to-video`.
 For instance:
 
 ```shell
@@ -79,142 +87,133 @@ mkdir -p models/control
 wget -P models/control https://huggingface.co/lllyasviel/ControlNet/resolve/main/models/control_sd15_canny.pth 
 ```
 
+--->
+
 
 #### Text-To-Video with Edge Guidance and Dreambooth
 
-Integrate a `SD1.5` Dreambooth model into ControlNet using [this](https://github.com/lllyasviel/ControlNet/discussions/12) procedure. Load the model into `models/control_db/`. Dreambooth models can be obtained, for instance, from [CIVITAI](https://civitai.com). 
+Integrate a `SD1.4` Dreambooth model into ControlNet using [this](https://github.com/lllyasviel/ControlNet/discussions/12) procedure. Load the model into `models/control_db/`. Dreambooth models can be obtained, for instance, from [CIVITAI](https://civitai.com). 
 
 We provide already prepared model files for `anime` (keyword `1girl`), `arcane style` (keyword `arcane style`) `avatar` (keyword `avatar style`) and `gta-5 style`  (keyword `gtav style`). To this end, download the model files from [google drive](https://drive.google.com/drive/folders/1uwXNjJ-4Ws6pqyjrIWyVPWu_u4aJrqt8?usp=share_link) and extract them into `models/control_db/`.
 
 ## Inference API
 
+To run inferences create an instance of `Model` class
+```python
+import torch
+from model import Model
+
+model = Model(device = "cuda", dtype = torch.float16)
+```
+
+---
+
+
 ### Text-To-Video
-To directly call our text-to-video generator, run this python command:
+To directly call our text-to-video generator, run this python command which stores the result in `tmp/text2video/A_horse_galloping_on_a_street.mp4` :
 ```python
-from text_to_video.text_to_video_generator import TextToVideo
-t2v_generator = TextToVideo()
+from pathlib import Path
+
 prompt = "A horse galloping on a street"
+params = {"t0": 44, "t1": 47 , "motion_field_strength_x" : 12, "motion_field_strength_y" : 12, "video_length": 8}
 
-# run text-to-video, output format 3x1xFxHxW
-# with F = number of frames
-# H and W = width and height
-video = t2v_generator.inference(prompt)
-```
-You can create gifs by calling
-```python
-from app_text_to_video import tensor_to_gif
-gif_file_name = tensor_to_gif(video)
-print(f"The video has been stored as {gif_file_name}")
+out_path, fps = Path(f"tmp/text2video/{prompt.replace(' ','_')}.mp4"), 4
+if not out_path.parent.exists():
+  out_path.parent.mkdir(parents=True)
+model.process_text2video(prompt, fps = fps, path = out_path.as_posix(), **params)
 ```
 
-#### Hyperparameters
+#### Hyperparameters (Optional)
 
 You can define the following hyperparameters:
-* **motion field strength**:   Define value `motion_field_strength`. Then: `motion_field_strength` = $\delta_x = \delta_y$ (see our paper, Sect. 3.3.1). Default: `motion_field_strength=12`.
-* $T$ and $T'$ (see our paper, Sect. 3.3.1). Define values `t0` and `t1`. Default: `t0=881`, `t1=941`.
-* **video length**: Define the number of frames `video_length` to be generated. Default: `video_length=8`.
+* **Motion field strength**:   `motion_field_strength_x` = $\delta_x$  and `motion_field_strength_y` = $\delta_x$ (see our paper, Sect. 3.3.1). Default: `motion_field_strength_x=motion_field_strength_y= 12`.
+* $T$ and $T'$ (see our paper, Sect. 3.3.1). Define values `t0` and `t1` in the range `{0,...,50}`. Default: `t0=44`, `t1=47` (DDIM steps). Corresponds to timesteps `881` and `941`, respectively. 
+* **Video length**: Define the number of frames `video_length` to be generated. Default: `video_length=8`.
 
-To use these hyperparameters, create a custom `TextToVideo` object:
-```python
-t2v_generator = TextToVideo(motion_field_strength = motion_field_strength, t0 = t0, t1 = t1, video_length = video_length)
-```
-
-#### Ablation Study
-In order to replicate the ablation study, `cross-frame attention` can be deactivated as follows:
-
-```python
-t2v_generator = TextToVideo(use_cf_attn=False)
-```
-Enriching latents with motion dynamics can be deactivated as follows:
-```python
-t2v_generator = TextToVideo(use_motion_field=False)
-```
 
 ---
 
 ### Text-To-Video with Pose Control
 To directly call our text-to-video generator with pose control, run this python command:
 ```python
-from text_to_video_generator_pose import TextToVideoPose
-t2v_pose_generator = TextToVideoPose()
+from pathlib import Path
 
 prompt = 'an astronaut dancing in outer space'
-motion_path = '__assets__/poses_videos_corrected/dance1.mp4'
-
-video = t2v_pose_generator.inference(prompt, motion_path)
-```
-You can create gifs by calling
-```python
-from app_pose import post_process_gif
-out_path = 'out_pose.gif'
-gif_file_name = post_process_gif(video, out_path)
-print(f"The video has been stored as {gif_file_name}")
+motion_path = Path('__assets__/poses_skeleton_gifs/dance1_corr.mp4')
+out_path = Path(f'./{prompt}.gif')
+model.process_controlnet_pose(motion_path.as_posix(), prompt=prompt, save_path=out_path.as_posix())
 ```
 
-#### Ablation Study
-In order to replicate the ablation study, `cross-frame attention` can be deactivated as follows:
-
-```python
-t2v_pose_generator = TextToVideoPose(use_cf_attn=False)
-```
-Enriching latents with motion dynamics can be deactivated as follows:
-```python
-t2v_pose_generator = TextToVideoPose(use_motion_field=False)
-```
 
 ---
 
 ### Text-To-Video with Edge Control
 To directly call our text-to-video generator with edge control, run this python command:
 ```python
-from text_to_video_generator_canny import TextToVideoCanny
-t2v_canny_generator = TextToVideoCanny()
+from pathlib import Path
 
 prompt = 'oil painting of a deer, a high-quality, detailed, and professional photo'
-motion_path = '__assets__/canny_videos_correct/deer_orig.mp4'
-
-video = t2v_canny_generator.inference(prompt, motion_path)
-```
-You can create gifs by calling
-```python
-from app_canny import post_process_gif
-out_path = 'out_canny.gif'
-gif_file_name = post_process_gif(video, out_path)
+video_path = Path('__assets__/canny_videos_mp4/deer.mp4')
+out_path = Path(f'./{prompt}.mp4')
+model.process_controlnet_canny(video_path.as_posix(), prompt=prompt, save_path=out_path.as_posix())
 ```
 
 #### Hyperparameters
 
 You can define the following hyperparameters for Canny edge detection:
-* **low threshold**. Define value `low` in the range $(0, 255)$. Default: `low=100`.
-* **high threshold**. Define value `high` in the range $(0, 255)$. Default: `high=200`. Make sure that `high` > `low`.
+* **low threshold**. Define value `low_threshold` in the range $(0, 255)$. Default: `low_threshold=100`.
+* **high threshold**. Define value `high_threshold` in the range $(0, 255)$. Default: `high_threshold=200`. Make sure that `high_threshold` > `low_threshold`.
 
-To use these hyperparameters, create a custom `TextToVideoCanny` object:
-```python
-t2v_canny_generator = TextToVideoCanny(low=low, high=high)
-```
-
-#### Ablation Study
-In order to replicate the ablation study, `cross-frame attention` can be deactivated as follows:
-
-```python
-t2v_canny_generator = TextToVideoCanny(use_cf_attn=False)
-```
-Enriching latents with motion dynamics can be deactivated as follows:
-```python
-t2v_canny_generator = TextToVideoCanny(use_motion_field=False)
-```
+You can give hyperparameters as arguments to `model.process_controlnet_canny`
 
 ---
 
 
 ### Text-To-Video with Edge Guidance and Dreambooth specialization
 Load a dreambooth model then proceed as described in `Text-To-Video with Edge Guidance`
+```python
+from pathlib import Path
 
+prompt = 'your prompt'
+video_path = Path('path/to/your/video')
+dreambooth_model_path = Path('path/to/your/dreambooth/model')
+out_path = Path(f'./{prompt}.gif')
+model.process_controlnet_canny_db(dreambooth_model_path.as_posix(), video_path.as_posix(), prompt=prompt, save_path=out_path.as_posix())
+```
 ---
 
 ### Video Instruct-Pix2Pix
 
-**TODO**
+To perform pix2pix video editing, run this python command:
+```python
+from pathlib import Path
+
+prompt = 'make it Van Gogh Starry Night'
+video_path = Path('__assets__/pix2pix video/camel.mp4')
+out_path = Path(f'./{prompt}.mp4')
+model.process_pix2pix(video_path.as_posix(), prompt=prompt, save_path=out_path.as_posix())
+```
+
+---
+
+### Low Memory Inference
+Each of the above introduced interface can be run in a low memory setup. In the minimal setup, a GPU with **12 GB VRAM** is sufficient. 
+
+To reduce the memory usage, add `chunk_size=k` as additional parameter when calling one of the above defined inference APIs. The integer value `k` must be in the range `{2,...,video_length}`. It defines the number of frames that are processed at once (without any loss in quality). The lower the value the less memory is needed.
+
+
+We plan to release soon a new version that further reduces the memory usage. 
+
+
+---
+
+
+### Ablation Study
+To replicate the ablation study, add additional parameters when calling the above defined inference APIs.
+*  To deactivate `cross-frame attention`: Add `use_cf_attn=False` to the parameter list.
+* To deactivate enriching latent codes with `motion dynamics`: Add `use_motion_field=False` to the parameter list.
+
+---
 
 ## Inference using Gradio
 From the project root folder, run this shell command:
@@ -223,11 +222,6 @@ python app.py
 ```
 
 Then access the app [locally](http://127.0.0.1:7860) with a browser.
-
-
-
--->
-
 
 
 
@@ -360,7 +354,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
   <td width=25% style="text-align:center;">"anime style"</td>
   <td width=25% style="text-align:center;">"arcane style</td>
     <td width=25% style="text-align:center;">"gta-5 man"</td>
-  <td width=25% style="text-align:center;">"avar style"</td>
+  <td width=25% style="text-align:center;">"avatar style"</td>
 </tr>
 
 </table>
@@ -391,6 +385,10 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
     <td width=25% style="text-align:center;">"Make it autumn"</td>
 </tr>
 </table>
+
+## License
+Our code is published under the CreativeML Open RAIL-M license. The license provided in this repository applies to all additions and contributions we make upon the original stable diffusion code. The original stable diffusion code is under the CreativeML Open RAIL-M license, which can found [here](https://github.com/CompVis/stable-diffusion/blob/main/LICENSE).
+
 
 ## BibTeX
 If you use our work in your research, please cite our publication:
