@@ -14,25 +14,14 @@ from app_pose import create_demo as create_demo_pose
 from app_text_to_video import create_demo as create_demo_text_to_video
 from app_pix2pix_video import create_demo as create_demo_pix2pix_video
 from app_canny_db import create_demo as create_demo_canny_db
+import argparse
+
 
 model = Model(device='cuda', dtype=torch.float16)
-# TITLE = '# Text2Video-Zero'
-# DESCRIPTION = '# Text2Video-Zero'
-
-# with gr.Blocks(css='style.css') as demo:
-#     gr.Markdown(TITLE)
-#     with gr.Tabs():
-#         with gr.TabItem('Zero-Shot Text2Video'):
-#             create_demo_text_to_video()
-#         with gr.TabItem('Video Instruct Pix2Pix'):
-#             create_demo_pix2pix_video()
-#         with gr.TabItem('Pose Conditional'):
-#             create_demo_pose()
-#         with gr.TabItem('Edge Conditional'):
-#             create_demo_canny()
-#         with gr.TabItem('Edge Conditional and Dreambooth Specialized'):
-#             create_demo_canny_db()
-
+parser = argparse.ArgumentParser()
+parser.add_argument('--public_access', action='store_true',
+                    help="if enabled, the app can be access from a public url", default=False)
+args = parser.parse_args()
 
 
 with gr.Blocks(css='style.css') as demo:
@@ -90,5 +79,6 @@ with gr.Blocks(css='style.css') as demo:
 # demo.launch(share=True)
 # demo.launch(debug=True)
 
-_,_,link = demo.queue(api_open=False).launch(file_directories=['temporal'], share=True)
+_, _, link = demo.queue(api_open=False).launch(
+    file_directories=['temporal'], share=args.public_access)
 print(link)

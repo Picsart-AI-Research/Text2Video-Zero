@@ -48,14 +48,21 @@ To achieve this goal, all contributions are welcome. Please check out these exte
 ## Setup
 
 
-
-
-### Requirements
+1. Clone this repository and enter:
 
 ```shell
+git clone https://github.com/Picsart-AI-Research/Text2Video-Zero.git
+cd Text2Video-Zero/
+```
+2. Install requirements using Python 3.9
+```shell
+virtualenv --system-site-packages -p python3.9 venv
+source venv/bin/activate
 pip install -r requirements.txt
 ```
-<!--- Installing [xformers](https://github.com/facebookresearch/xformers) is highly recommended for more efficiency and speed on GPUs. --->
+
+
+<!--- Installing [xformers](https://github.com/facebookresearch/xformers) is highly recommended for more efficiency and speed on GPUs. 
 
 ### Weights
 
@@ -249,6 +256,12 @@ python app.py
 ```
 
 Then access the app [locally](http://127.0.0.1:7860) with a browser.
+
+To access the app remotely, run this shell command:
+```shell
+python app.py --public_access
+```
+For security information about public access we refer to the documentation of gradio [https://gradio.app/sharing-your-app/#security-and-file-access].
 
 
 
