@@ -13,7 +13,7 @@ from diffusers.schedulers import KarrasDiffusionSchedulers
 from diffusers.pipelines.stable_diffusion import StableDiffusionSafetyChecker
 import PIL
 from PIL import Image
-# rom kornia.morphology import dilation
+from kornia.morphology import dilation
 
 
 @dataclass
