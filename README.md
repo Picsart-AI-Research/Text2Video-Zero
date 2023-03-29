@@ -196,8 +196,9 @@ model.process_controlnet_canny_db(dreambooth_model_path, video_path, prompt=prom
 The value `video_path` can be the path to a `mp4` file. To use one of the example videos provided, set `video_path="woman1"`, `video_path="woman2"`, `video_path="woman3"`, or `video_path="man1"`. 
  
 
-The value `dreambooth_model_path` can be the path of a `.pt` model file. To use one of the dreambooth models provided, set `dreambooth_model_path = "Anime DB"`, `dreambooth_model_path = "Avatar DB"`, `dreambooth_model_path = "GTA-5 DB"`, or `dreambooth_model_path = "Arcane DB"`.  The corresponding keywords are: `1girl` (for `Anime DB`), `arcane style` (for `Arcane DB`) `avatar style` (for `Avatar DB`) and `gta-5 style`  (for `GTA-5 DB`).
+The value `dreambooth_model_path` can either be a link to a diffuser model file, or the name of one of the dreambooth models provided. To this end, set `dreambooth_model_path = "Anime DB"`, `dreambooth_model_path = "Avatar DB"`, `dreambooth_model_path = "GTA-5 DB"`, or `dreambooth_model_path = "Arcane DB"`.  The corresponding keywords are: `1girl` (for `Anime DB`), `arcane style` (for `Arcane DB`) `avatar style` (for `Avatar DB`) and `gta-5 style`  (for `GTA-5 DB`).
 
+If the model file is not in diffuser format, it must be [converted](https://github.com/huggingface/diffusers/blob/main/scripts/convert_original_stable_diffusion_to_diffusers.py). 
 
 
 ---
