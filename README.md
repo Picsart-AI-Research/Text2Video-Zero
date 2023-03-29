@@ -33,6 +33,18 @@ Roberto Henschel,
 `text, canny-edge and dreambooth conditional video generation`.
 * [03/28/2023] Code for all our generation methods released! We added a new low-memory setup. Minimum required GPU VRAM is currently **12 GB**. It will be further reduced in the upcoming releases. 
 
+
+
+## Contribute
+We are on a journey to democratize AI and empower the creativity of everyone, and we believe Text2Video-Zero is a great research direction to unleash the zero-shot video generation and editing capacity of the amazing text-to-image models!
+
+To achieve this goal, all contributions are welcome. Please check out these external implementations and extensions of Text2Video-Zero. We thank the authors for their efforts and contributions:
+* https://github.com/JiauZhang/Text2Video-Zero
+* https://github.com/camenduru/text2video-zero-colab
+* https://github.com/SHI-Labs/Text2Video-Zero-sd-webui
+
+
+
 ## Setup
 
 
@@ -119,15 +131,11 @@ model = Model(device = "cuda", dtype = torch.float16)
 ### Text-To-Video
 To directly call our text-to-video generator, run this python command which stores the result in `tmp/text2video/A_horse_galloping_on_a_street.mp4` :
 ```python
-from pathlib import Path
-
 prompt = "A horse galloping on a street"
 params = {"t0": 44, "t1": 47 , "motion_field_strength_x" : 12, "motion_field_strength_y" : 12, "video_length": 8}
 
-out_path, fps = Path(f"tmp/text2video/{prompt.replace(' ','_')}.mp4"), 4
-if not out_path.parent.exists():
-  out_path.parent.mkdir(parents=True)
-model.process_text2video(prompt, fps = fps, path = out_path.as_posix(), **params)
+out_path, fps = f"./text2video_{prompt.replace(' ','_')}.mp4", 4
+model.process_text2video(prompt, fps = fps, path = out_path, **params)
 ```
 
 #### Hyperparameters (Optional)
@@ -146,9 +154,9 @@ To directly call our text-to-video generator with pose control, run this python 
 from pathlib import Path
 
 prompt = 'an astronaut dancing in outer space'
-motion_path = Path('__assets__/poses_skeleton_gifs/dance1_corr.mp4')
-out_path = Path(f'./{prompt}.gif')
-model.process_controlnet_pose(motion_path.as_posix(), prompt=prompt, save_path=out_path.as_posix())
+motion_path = '__assets__/poses_skeleton_gifs/dance1_corr.mp4'
+out_path = f"./text2video_pose_guidance_{prompt.replace(' ','_')}.gif"
+model.process_controlnet_pose(motion_path, prompt=prompt, save_path=out_path)
 ```
 
 
@@ -157,12 +165,10 @@ model.process_controlnet_pose(motion_path.as_posix(), prompt=prompt, save_path=o
 ### Text-To-Video with Edge Control
 To directly call our text-to-video generator with edge control, run this python command:
 ```python
-from pathlib import Path
-
 prompt = 'oil painting of a deer, a high-quality, detailed, and professional photo'
-video_path = Path('__assets__/canny_videos_mp4/deer.mp4')
-out_path = Path(f'./{prompt}.mp4')
-model.process_controlnet_canny(video_path.as_posix(), prompt=prompt, save_path=out_path.as_posix())
+video_path = '__assets__/canny_videos_mp4/deer.mp4'
+out_path = f'./text2video_edge_guidance_{prompt}.mp4'
+model.process_controlnet_canny(video_path, prompt=prompt, save_path=out_path)
 ```
 
 #### Hyperparameters
@@ -179,26 +185,33 @@ You can give hyperparameters as arguments to `model.process_controlnet_canny`
 ### Text-To-Video with Edge Guidance and Dreambooth specialization
 Load a dreambooth model then proceed as described in `Text-To-Video with Edge Guidance`
 ```python
-from pathlib import Path
 
 prompt = 'your prompt'
-video_path = Path('path/to/your/video')
-dreambooth_model_path = Path('path/to/your/dreambooth/model')
-out_path = Path(f'./{prompt}.gif')
-model.process_controlnet_canny_db(dreambooth_model_path.as_posix(), video_path.as_posix(), prompt=prompt, save_path=out_path.as_posix())
+video_path = 'path/to/your/video'
+dreambooth_model_path = 'path/to/your/dreambooth/model'
+out_path = f'./text2video_edge_db_{prompt}.gif'
+model.process_controlnet_canny_db(dreambooth_model_path, video_path, prompt=prompt, save_path=out_path)
 ```
+
+The value `video_path` can be the path to a `mp4` file. To use one of the example videos provided, set `video_path="woman1"`, `video_path="woman2"`, `video_path="woman3"`, or `video_path="man1"`. 
+ 
+
+The value `dreambooth_model_path` can be the path of a `.pt` model file. To use one of the dreambooth models provided, set `dreambooth_model_path = "Anime DB"`, `dreambooth_model_path = "Avatar DB"`, `dreambooth_model_path = "GTA-5 DB"`, or `dreambooth_model_path = "Arcane DB"`.  The corresponding keywords are: `1girl` (for `Anime DB`), `arcane style` (for `Arcane DB`) `avatar style` (for `Avatar DB`) and `gta-5 style`  (for `GTA-5 DB`).
+
+
+
 ---
+
+
 
 ### Video Instruct-Pix2Pix
 
 To perform pix2pix video editing, run this python command:
 ```python
-from pathlib import Path
-
 prompt = 'make it Van Gogh Starry Night'
-video_path = Path('__assets__/pix2pix video/camel.mp4')
-out_path = Path(f'./{prompt}.mp4')
-model.process_pix2pix(video_path.as_posix(), prompt=prompt, save_path=out_path.as_posix())
+video_path = '__assets__/pix2pix video/camel.mp4'
+out_path = f'./video_instruct_pix2pix_{prompt}.mp4'
+model.process_pix2pix(video_path, prompt=prompt, save_path=out_path)
 ```
 
 ---
@@ -398,6 +411,9 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
     <td width=25% style="text-align:center;">"Make it autumn"</td>
 </tr>
 </table>
+
+
+
 
 ## License
 Our code is published under the CreativeML Open RAIL-M license. The license provided in this repository applies to all additions and contributions we make upon the original stable diffusion code. The original stable diffusion code is under the CreativeML Open RAIL-M license, which can found [here](https://github.com/CompVis/stable-diffusion/blob/main/LICENSE).

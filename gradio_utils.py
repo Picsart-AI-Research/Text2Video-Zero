@@ -50,7 +50,7 @@ def get_video_from_canny_selection(canny_selection):
     elif canny_selection == "woman3":
         input_video_path = "__assets__/db_files/woman3.mp4"
     else:
-        raise Exception
+        input_video_path = canny_selection
 
     return input_video_path
 
@@ -65,7 +65,8 @@ def get_model_from_db_selection(db_selection):
     elif db_selection == "Arcane DB":
         input_video_path = 'PAIR/controlnet-canny-arcane'
     else:
-        raise Exception
+        input_video_path = db_selection
+
     return input_video_path
 
 
