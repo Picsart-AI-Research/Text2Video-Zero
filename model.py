@@ -116,6 +116,7 @@ class Model:
     def process_controlnet_canny(self,
                                  video_path,
                                  prompt,
+                                 chunk_size=8,
                                  num_inference_steps=20,
                                  controlnet_conditioning_scale=1.0,
                                  guidance_scale=9.0,
@@ -125,7 +126,6 @@ class Model:
                                  high_threshold=200,
                                  resolution=512,
                                  use_cf_attn=True,
-                                 chunk_size=8,
                                  save_path=None):
         video_path = gradio_utils.edge_path_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetCanny:
@@ -173,6 +173,7 @@ class Model:
     def process_controlnet_pose(self,
                                 video_path,
                                 prompt,
+                                chunk_size=8,
                                 num_inference_steps=20,
                                 controlnet_conditioning_scale=1.0,
                                 guidance_scale=9.0,
@@ -180,7 +181,6 @@ class Model:
                                 eta=0.0,
                                 resolution=512,
                                 use_cf_attn=True,
-                                chunk_size=8,
                                 save_path=None):
         video_path = gradio_utils.motion_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetPose:
@@ -232,6 +232,7 @@ class Model:
                                     db_path,
                                     video_path,
                                     prompt,
+                                    chunk_size=8,
                                     num_inference_steps=20,
                                     controlnet_conditioning_scale=1.0,
                                     guidance_scale=9.0,
@@ -241,7 +242,6 @@ class Model:
                                     high_threshold=200,
                                     resolution=512,
                                     use_cf_attn=True,
-                                    chunk_size=8,
                                     save_path=None):
         db_path = gradio_utils.get_model_from_db_selection(db_path)
         video_path = gradio_utils.get_video_from_canny_selection(video_path)
@@ -290,7 +290,7 @@ class Model:
                                 )
         return utils.create_gif(result, fps, path=save_path)
 
-    def process_pix2pix(self, video, prompt, resolution=512, seed=0, start_t=0, end_t=-1, out_fps=-1, use_cf_attn=True, save_path=None, chunk_size=8):
+    def process_pix2pix(self, video, prompt, resolution=512, seed=0, start_t=0, end_t=-1, out_fps=-1, chunk_size=8, use_cf_attn=True, save_path=None):
         if self.model_type != ModelType.Pix2Pix_Video:
             self.set_model(ModelType.Pix2Pix_Video,
                            model_id="timbrooks/instruct-pix2pix")
@@ -313,9 +313,9 @@ class Model:
                                 )
         return utils.create_video(result, fps, path=save_path)
 
-    def process_text2video(self, prompt, motion_field_strength_x=12, motion_field_strength_y=12, t0=44, t1=47,  n_prompt="", inject_noise_to_warp=False, resolution=512, seed=-1, video_length=8, fps=4,
+    def process_text2video(self, prompt, motion_field_strength_x=12, motion_field_strength_y=12, t0=44, t1=47,  n_prompt="", chunk_size=8, video_length=8, inject_noise_to_warp=False, resolution=512, seed=-1,  fps=4,
                            use_cf_attn=True, use_motion_field=True,
-                           smooth_bg=False, smooth_bg_strength=0.4, path=None, chunk_size=8):
+                           smooth_bg=False, smooth_bg_strength=0.4, path=None):
 
         if self.model_type != ModelType.Text2Video:
             unet = UNet2DConditionModel.from_pretrained(
@@ -338,7 +338,7 @@ class Model:
         prompt = prompt.rstrip()
         prompt = prompt + ", "+added_prompt
         if len(n_prompt) > 0:
-            negative_prompt = [n_prompt]
+            negative_prompt = n_prompt
         else:
             negative_prompt = None
 

@@ -42,8 +42,13 @@ def create_demo(model: Model):
                     t1 = gr.Slider(label="Timestep t1", minimum=0,
                                    maximum=49, value=47, step=1)
                     # inject_noise_to_warp = gr.Checkbox(label="add noise to  warp function")
+                    chunk_size = gr.Slider(
+                        label="Chunk size", minimum=2, maximum=8, value=8, step=1)
+
                     n_prompt = gr.Textbox(label="Optional Negative Prompt",
                                           value='')
+                    video_length = gr.Number(
+                        label="Video length", value=8, min=2, precision=0)
             with gr.Column():
                 result = gr.Video(label="Generated Video")
         inputs = [
@@ -52,7 +57,9 @@ def create_demo(model: Model):
             motion_field_strength_y,
             t0,
             t1,
-            n_prompt
+            n_prompt,
+            chunk_size,
+            video_length
         ]
 
         gr.Examples(examples=examples,

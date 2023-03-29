@@ -57,13 +57,13 @@ def get_video_from_canny_selection(canny_selection):
 
 def get_model_from_db_selection(db_selection):
     if db_selection == "Anime DB":
-        input_video_path = './models/control_db/db_anime'
+        input_video_path = 'PAIR/controlnet-canny-anime'
     elif db_selection == "Avatar DB":
-        input_video_path = './models/control_db/db_avatar'
+        input_video_path = 'PAIR/controlnet-canny-avatar'
     elif db_selection == "GTA-5 DB":
-        input_video_path = './models/control_db/db_gta5'
+        input_video_path = 'PAIR/controlnet-canny-gta5'
     elif db_selection == "Arcane DB":
-        input_video_path = './models/control_db/db_arcane'
+        input_video_path = 'PAIR/controlnet-canny-arcane'
     else:
         raise Exception
     return input_video_path
@@ -77,4 +77,3 @@ def get_db_name_from_id(id):
 def get_canny_name_from_id(id):
     canny_names = ["woman1", "woman2", "man1", "woman3"]
     return canny_names[id]
-

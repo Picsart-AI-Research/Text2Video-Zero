@@ -4,7 +4,8 @@ from model import Model
 
 def create_demo(model: Model):
     examples = [
-        ['__assets__/pix2pix video/camel.mp4', 'make it Van Gogh Starry Night style'],
+        ['__assets__/pix2pix video/camel.mp4',
+            'make it Van Gogh Starry Night style'],
         ['__assets__/pix2pix video/mini-cooper.mp4', 'make it Picasso style'],
         ['__assets__/pix2pix video/snowboard.mp4', 'replace man with robot'],
         ['__assets__/pix2pix video/white-swan.mp4', 'replace swan with mallard'],
@@ -14,7 +15,8 @@ def create_demo(model: Model):
             gr.Markdown('## Video Instruct Pix2Pix')
         with gr.Row():
             with gr.Column():
-                input_image = gr.Video(label="Input Video",source='upload', type='numpy', format="mp4", visible=True).style(height="auto")
+                input_image = gr.Video(label="Input Video", source='upload',
+                                       type='numpy', format="mp4", visible=True).style(height="auto")
             with gr.Column():
                 prompt = gr.Textbox(label='Prompt')
                 run_button = gr.Button(label='Run')
@@ -44,9 +46,11 @@ def create_demo(model: Model):
                                         maximum=30,
                                         value=-1,
                                         step=1)
+                    chunk_size = gr.Slider(
+                        label="Chunk size", minimum=2, maximum=8, value=8, step=1)
             with gr.Column():
                 result = gr.Video(label='Output',
-                                    show_label=True)
+                                  show_label=True)
         inputs = [
             input_image,
             prompt,
@@ -54,7 +58,8 @@ def create_demo(model: Model):
             seed,
             start_t,
             end_t,
-            out_fps
+            out_fps,
+            chunk_size
         ]
         gr.Examples(examples, inputs, result)
         # prompt.submit(fn=process, inputs=inputs, outputs=result)
