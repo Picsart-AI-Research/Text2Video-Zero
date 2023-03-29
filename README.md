@@ -250,7 +250,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 </tr>
 <tr>
   <td width=25% style="text-align:center;">"A cat is running on the grass"</td>
-  <td width=25% style="text-align:center;">"A panda is playing guitar on times square</td>
+  <td width=25% style="text-align:center;">"A panda is playing guitar on times square"</td>
   <td width=25% style="text-align:center;">"A man is running in the snow"</td>
   <td width=25% style="text-align:center;">"An astronaut is skiing down the hill"</td>
 </tr>
@@ -263,7 +263,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 </tr>
 <tr>
   <td width=25% style="text-align:center;">"A panda surfing on a wakeboard"</td>
-  <td width=25% style="text-align:center;">"A bear dancing on times square</td>
+  <td width=25% style="text-align:center;">"A bear dancing on times square"</td>
   <td width=25% style="text-align:center;">"A man is riding a bicycle in the sunshine"</td>
   <td width=25% style="text-align:center;">"A horse galloping on a street"</td>
 </tr>
@@ -276,7 +276,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 </tr>
 <tr>
   <td width=25% style="text-align:center;">"A tiger walking alone down the street"</td>
-  <td width=25% style="text-align:center;">"A panda surfing on a wakeboard</td>
+  <td width=25% style="text-align:center;">"A panda surfing on a wakeboard"</td>
   <td width=25% style="text-align:center;">"A horse galloping on a street"</td>
   <td width=25% style="text-align:center;">"A cute cat running in a beatiful meadow"</td>
 </tr>
@@ -290,7 +290,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 </tr>
 <tr>
   <td width=25% style="text-align:center;">"A horse galloping on a street"</td>
-  <td width=25% style="text-align:center;">"A panda walking alone down the street</td>
+  <td width=25% style="text-align:center;">"A panda walking alone down the street"</td>
   <td width=25% style="text-align:center;">"A dog is walking down the street"</td>
   <td width=25% style="text-align:center;">"An astronaut is waving his hands on the moon"</td>
 </tr>
@@ -310,7 +310,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 </tr>
 <tr>
   <td width=25% style="text-align:center;">"A bear dancing on the concrete"</td>
-  <td width=25% style="text-align:center;">"An alien dancing under a flying saucer</td>
+  <td width=25% style="text-align:center;">"An alien dancing under a flying saucer"</td>
   <td width=25% style="text-align:center;">"A panda dancing in Antarctica"</td>
   <td width=25% style="text-align:center;">"An astronaut dancing in the outer space"</td>
 
@@ -330,7 +330,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 </tr>
 <tr>
   <td width=25% style="text-align:center;">"White butterfly"</td>
-  <td width=25% style="text-align:center;">"Beautiful girl</td>
+  <td width=25% style="text-align:center;">"Beautiful girl"</td>
     <td width=25% style="text-align:center;">"A jellyfish"</td>
   <td width=25% style="text-align:center;">"beautiful girl halloween style"</td>
 </tr>
@@ -343,7 +343,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 </tr>
 <tr>
   <td width=25% style="text-align:center;">"Wild fox is walking"</td>
-  <td width=25% style="text-align:center;">"Oil painting of a beautiful girl close-up</td>
+  <td width=25% style="text-align:center;">"Oil painting of a beautiful girl close-up"</td>
     <td width=25% style="text-align:center;">"A santa claus"</td>
   <td width=25% style="text-align:center;">"A deer"</td>
 </tr>
@@ -365,7 +365,7 @@ Then access the app [locally](http://127.0.0.1:7860) with a browser.
 </tr>
 <tr>
   <td width=25% style="text-align:center;">"anime style"</td>
-  <td width=25% style="text-align:center;">"arcane style</td>
+  <td width=25% style="text-align:center;">"arcane style"</td>
     <td width=25% style="text-align:center;">"gta-5 man"</td>
   <td width=25% style="text-align:center;">"avatar style"</td>
 </tr>
