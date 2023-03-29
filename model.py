@@ -132,7 +132,7 @@ class Model:
             controlnet = ControlNetModel.from_pretrained(
                 "lllyasviel/sd-controlnet-canny")
             self.set_model(ModelType.ControlNetCanny,
-                           model_id="models/text-to-video", controlnet=controlnet)
+                           model_id="runwayml/stable-diffusion-v1-5", controlnet=controlnet)
             self.pipe.scheduler = DDIMScheduler.from_config(
                 self.pipe.scheduler.config)
             if use_cf_attn:
@@ -187,7 +187,7 @@ class Model:
             controlnet = ControlNetModel.from_pretrained(
                 "fusing/stable-diffusion-v1-5-controlnet-openpose")
             self.set_model(ModelType.ControlNetPose,
-                           model_id="models/text-to-video", controlnet=controlnet)
+                           model_id="runwayml/stable-diffusion-v1-5", controlnet=controlnet)
             self.pipe.scheduler = DDIMScheduler.from_config(
                 self.pipe.scheduler.config)
             if use_cf_attn:
@@ -198,17 +198,6 @@ class Model:
 
         video_path = gradio_utils.motion_to_video_path(
             video_path) if 'Motion' in video_path else video_path
-        if self.model_type != ModelType.ControlNetPose:
-            controlnet = ControlNetModel.from_pretrained(
-                "fusing/stable-diffusion-v1-5-controlnet-openpose")
-            self.set_model(ModelType.ControlNetPose,
-                           model_id="models/text-to-video", controlnet=controlnet)
-            self.pipe.scheduler = DDIMScheduler.from_config(
-                self.pipe.scheduler.config)
-            self.pipe.unet.set_attn_processor(
-                processor=self.controlnet_attn_proc)
-            self.pipe.controlnet.set_attn_processor(
-                processor=self.controlnet_attn_proc)
 
         added_prompt = 'best quality, extremely detailed, HD, ultra-realistic, 8K, HQ, masterpiece, trending on artstation, art, smooth'
         negative_prompts = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer difits, cropped, worst quality, low quality, deformed body, bloated, ugly, unrealistic'
