@@ -15,6 +15,7 @@ numpy==1.24.1
 omegaconf==2.3.0
 open_clip_torch==2.16.0
 opencv_python==4.7.0.72
+opencv-contrib-python==4.7.0.72
 Pillow==9.4.0
 pytorch_lightning==1.5.0
 prettytable==3.6.0
