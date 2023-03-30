@@ -31,3 +31,4 @@ test-tube>=0.7.5
 webdataset==0.2.5
 yapf==0.32.0
 safetensors==0.2.7
+beautifulsoup4

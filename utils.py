@@ -1,8 +1,10 @@
 import os
+
+import PIL.Image
 import numpy as np
 import torch
 import torchvision
-from torchvision.transforms import Resize
+from torchvision.transforms import Resize, InterpolationMode
 import imageio
 from einops import rearrange
 import cv2
@@ -17,17 +19,27 @@ apply_canny = CannyDetector()
 apply_openpose = OpenposeDetector()
 
 
-def add_watermark(image, im_size_h, im_size_w, watermark_path="__assets__/picsart_watermark.jpg",
-                  wmsize=16, bbuf=5, opacity=0.9):
+def add_watermark(image, watermark_path, wm_rel_size=1/16, boundary=5):
     '''
     Creates a watermark on the saved inference image.
     We request that you do not remove this to properly assign credit to
     Shi-Lab's work.
     '''
-    watermark = Image.open(watermark_path).resize((wmsize, wmsize))
-    loc_h = im_size_h - wmsize - bbuf
-    loc_w = im_size_w - wmsize - bbuf
-    image[loc_h:-bbuf, loc_w:-bbuf, :] = watermark
+    watermark = Image.open(watermark_path)
+    w_0, h_0 = watermark.size
+    H, W, _ = image.shape
+    wmsize = int(max(H, W) * wm_rel_size)
+    aspect = h_0 / w_0
+    if aspect > 1.0:
+        watermark = watermark.resize((wmsize, int(aspect * wmsize)), Image.LANCZOS)
+    else:
+        watermark = watermark.resize((int(wmsize / aspect), wmsize), Image.LANCZOS)
+    w, h = watermark.size
+    loc_h = H - h - boundary
+    loc_w = W - w - boundary
+    image = Image.fromarray(image)
+    mask = watermark if watermark.mode in ('RGBA', 'LA') else None
+    image.paste(watermark, (loc_w, loc_h), mask)
     return image
 
 
@@ -61,7 +73,7 @@ def pre_process_pose(input_video, apply_pose_detect: bool = True):
     return rearrange(control, 'f h w c -> f c h w')
 
 
-def create_video(frames, fps, rescale=False, path=None):
+def create_video(frames, fps, rescale=False, path=None, watermark=None):
     if path is None:
         dir = "temporal"
         os.makedirs(dir, exist_ok=True)
@@ -74,15 +86,15 @@ def create_video(frames, fps, rescale=False, path=None):
             x = (x + 1.0) / 2.0  # -1,1 -> 0,1
         x = (x * 255).numpy().astype(np.uint8)
 
-        h_, w_, _ = x.shape
-        x = add_watermark(x, im_size_h=h_, im_size_w=w_)
+        if watermark is not None:
+            x = add_watermark(x, watermark)
         outputs.append(x)
         # imageio.imsave(os.path.join(dir, os.path.splitext(name)[0] + f'_{i}.jpg'), x)
 
     imageio.mimsave(path, outputs, fps=fps)
     return path
 
-def create_gif(frames, fps, rescale=False, path=None):
+def create_gif(frames, fps, rescale=False, path=None, watermark=None):
     if path is None:
         dir = "temporal"
         os.makedirs(dir, exist_ok=True)
@@ -94,8 +106,8 @@ def create_gif(frames, fps, rescale=False, path=None):
         if rescale:
             x = (x + 1.0) / 2.0  # -1,1 -> 0,1
         x = (x * 255).numpy().astype(np.uint8)
-        h_, w_, _ = x.shape
-        x = add_watermark(x, im_size_h=h_, im_size_w=w_)
+        if watermark is not None:
+            x = add_watermark(x, watermark)
         outputs.append(x)
         # imageio.imsave(os.path.join(dir, os.path.splitext(name)[0] + f'_{i}.jpg'), x)
 
@@ -104,11 +116,6 @@ def create_gif(frames, fps, rescale=False, path=None):
 
 def prepare_video(video_path:str, resolution:int, device, dtype, normalize=True, start_t:float=0, end_t:float=-1, output_fps:int=-1):
     vr = decord.VideoReader(video_path)
-    video = vr.get_batch(range(0, len(vr)))
-    if torch.is_tensor(video):
-        video = video.detach().cpu().numpy()
-    else:
-        video = vr.get_batch(range(0, len(vr))).asnumpy()
     initial_fps = vr.get_avg_fps()
     if output_fps == -1:
         output_fps = int(initial_fps)
@@ -118,24 +125,27 @@ def prepare_video(video_path:str, resolution:int, device, dtype, normalize=True,
         end_t = min(len(vr) / initial_fps, end_t)
     assert 0 <= start_t < end_t
     assert output_fps > 0
-    f, h, w, c = video.shape
     start_f_ind = int(start_t * initial_fps)
     end_f_ind = int(end_t * initial_fps)
     num_f = int((end_t - start_t) * output_fps)
     sample_idx = np.linspace(start_f_ind, end_f_ind, num_f, endpoint=False).astype(int)
-    video = video[sample_idx]
+    video = vr.get_batch(sample_idx)
+    if torch.is_tensor(video):
+        video = video.detach().cpu().numpy()
+    else:
+        video = video.asnumpy()
+    _, h, w, _ = video.shape
     video = rearrange(video, "f h w c -> f c h w")
     video = torch.Tensor(video).to(device).to(dtype)
     if h > w:
         w = int(w * resolution / h)
         w = w - w % 8
         h = resolution - resolution % 8
-        video = Resize((h, w))(video)
     else:
         h = int(h * resolution / w)
         h = h - h % 8
         w = resolution - resolution % 8
-        video = Resize((h, w))(video)
+    video = Resize((h, w), interpolation=InterpolationMode.BILINEAR, antialias=True)(video)
     if normalize:
         video = video / 127.5 - 1.0
     return video, output_fps
