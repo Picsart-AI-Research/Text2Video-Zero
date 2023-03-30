@@ -32,7 +32,8 @@ Roberto Henschel,
 * [03/27/2023] The [full version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo released! Now also included: `text and pose conditional video generation`, `text and canny-edge conditional video generation`, and 
 `text, canny-edge and dreambooth conditional video generation`.
 * [03/28/2023] Code for all our generation methods released! We added a new low-memory setup. Minimum required GPU VRAM is currently **12 GB**. It will be further reduced in the upcoming releases. 
-* [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, any base model for stable diffusion hosted on huggingface can now be loaded (including dreambooth models!). (ii) The generated videos can have arbitrary length. (iii) We improved the quality of Video Instruct-Pix2Pix. (iv) We added two longer examples for Video Instruct-Pix2Pix.   
+* [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, any base model for stable diffusion hosted on huggingface can now be loaded (including dreambooth models!). (ii) The generated videos (text-to-video) can have arbitrary length. (iii) We improved the quality of Video Instruct-Pix2Pix. (iv) We added two longer examples for Video Instruct-Pix2Pix.   
+* [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`.
 
 
 ## Contribute
@@ -158,8 +159,6 @@ You can define the following hyperparameters:
 ### Text-To-Video with Pose Control
 To directly call our text-to-video generator with pose control, run this python command:
 ```python
-from pathlib import Path
-
 prompt = 'an astronaut dancing in outer space'
 motion_path = '__assets__/poses_skeleton_gifs/dance1_corr.mp4'
 out_path = f"./text2video_pose_guidance_{prompt.replace(' ','_')}.gif"
@@ -261,7 +260,7 @@ To access the app remotely, run this shell command:
 ```shell
 python app.py --public_access
 ```
-For security information about public access we refer to the documentation of gradio [https://gradio.app/sharing-your-app/#security-and-file-access].
+For security information about public access we refer to the documentation of [gradio](https://gradio.app/sharing-your-app/#security-and-file-access).
 
 
 
