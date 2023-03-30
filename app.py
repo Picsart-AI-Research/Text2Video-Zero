@@ -2,15 +2,21 @@ import gradio as gr
 import torch
 
 from model import Model, ModelType
-
 from app_canny import create_demo as create_demo_canny
 from app_pose import create_demo as create_demo_pose
 from app_text_to_video import create_demo as create_demo_text_to_video
 from app_pix2pix_video import create_demo as create_demo_pix2pix_video
 from app_canny_db import create_demo as create_demo_canny_db
+import argparse
+import os
 
-
+on_huggingspace = os.environ.get("SPACE_AUTHOR_NAME") == "PAIR"
 model = Model(device='cuda', dtype=torch.float16)
+parser = argparse.ArgumentParser()
+parser.add_argument('--public_access', action='store_true',
+                    help="if enabled, the app can be access from a public url", default=False)
+args = parser.parse_args()
+
 
 with gr.Blocks(css='style.css') as demo:
     gr.HTML(
@@ -38,13 +44,13 @@ with gr.Blocks(css='style.css') as demo:
         </div>
         """)
 
-    
-    gr.HTML("""
-    <p>For faster inference without waiting in queue, you may duplicate the space and upgrade to GPU in settings.
-    <br/>
-    <a href="https://huggingface.co/spaces/PAIR/Text2Video-Zero?duplicate=true">
-    <img style="margin-top: 0em; margin-bottom: 0em" src="https://bit.ly/3gLdBN6" alt="Duplicate Space"></a>
-    </p>""")
+    if on_huggingspace:
+        gr.HTML("""
+        <p>For faster inference without waiting in queue, you may duplicate the space and upgrade to GPU in settings.
+        <br/>
+        <a href="https://huggingface.co/spaces/PAIR/Text2Video-Zero?duplicate=true">
+        <img style="margin-top: 0em; margin-bottom: 0em" src="https://bit.ly/3gLdBN6" alt="Duplicate Space"></a>
+        </p>""")
 
     with gr.Tab('Zero-Shot Text2Video'):
         create_demo_text_to_video(model)
@@ -78,9 +84,7 @@ with gr.Blocks(css='style.css') as demo:
         </div>
         """)
 
-# demo.launch(share=True)
-# demo.launch(debug=True)
 
 _, _, link = demo.queue(api_open=False).launch(
-    file_directories=['temporal'], share=args.public_access)
+    file_directories=['temporal'], share=args.public_access or on_huggingspace)
 print(link)

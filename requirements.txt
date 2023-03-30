@@ -14,7 +14,8 @@ moviepy==1.0.3
 numpy==1.24.1
 omegaconf==2.3.0
 open_clip_torch==2.16.0
-opencv_python==4.7.0.68
+opencv_python==4.7.0.72
+opencv-contrib-python==4.7.0.72
 Pillow==9.4.0
 pytorch_lightning==1.5.0
 prettytable==3.6.0
@@ -32,3 +33,4 @@ webdataset==0.2.5
 yapf==0.32.0
 safetensors==0.2.7
 beautifulsoup4
+bs4

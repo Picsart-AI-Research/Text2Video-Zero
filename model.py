@@ -3,15 +3,13 @@ import gc
 import numpy as np
 
 import torch
-import decord
+
 from diffusers import StableDiffusionInstructPix2PixPipeline, StableDiffusionControlNetPipeline, ControlNetModel, UNet2DConditionModel
 from diffusers.schedulers import EulerAncestralDiscreteScheduler, DDIMScheduler
-from text_to_video.text_to_video_pipeline import TextToVideoPipeline
+from text_to_video_pipeline import TextToVideoPipeline
 
 import utils
 import gradio_utils
-
-# decord.bridge.set_bridge('torch')
 
 
 class ModelType(Enum):
@@ -34,9 +32,12 @@ class Model:
             ModelType.ControlNetCannyDB: StableDiffusionControlNetPipeline,
             ModelType.ControlNetPose: StableDiffusionControlNetPipeline,
         }
-        self.controlnet_attn_proc = utils.CrossFrameAttnProcessor(unet_chunk_size=2)
-        self.pix2pix_attn_proc = utils.CrossFrameAttnProcessor(unet_chunk_size=3)
-        self.text2video_attn_proc = utils.CrossFrameAttnProcessor(unet_chunk_size=2)
+        self.controlnet_attn_proc = utils.CrossFrameAttnProcessor(
+            unet_chunk_size=2)
+        self.pix2pix_attn_proc = utils.CrossFrameAttnProcessor(
+            unet_chunk_size=3)
+        self.text2video_attn_proc = utils.CrossFrameAttnProcessor(
+            unet_chunk_size=2)
 
         self.pipe = None
         self.model_type = None
@@ -49,7 +50,8 @@ class Model:
         torch.cuda.empty_cache()
         gc.collect()
         safety_checker = kwargs.pop('safety_checker', None)
-        self.pipe = self.pipe_dict[model_type].from_pretrained(model_id, safety_checker=safety_checker, **kwargs).to(self.device).to(self.dtype)
+        self.pipe = self.pipe_dict[model_type].from_pretrained(
+            model_id, safety_checker=safety_checker, **kwargs).to(self.device).to(self.dtype)
         self.model_type = model_type
 
     def inference_chunk(self, frame_ids, **kwargs):
@@ -126,8 +128,10 @@ class Model:
                                  save_path=None):
         video_path = gradio_utils.edge_path_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetCanny:
-            controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny")
-            self.set_model(ModelType.ControlNetCanny,model_id="runwayml/stable-diffusion-v1-5", controlnet=controlnet)
+            controlnet = ControlNetModel.from_pretrained(
+                "lllyasviel/sd-controlnet-canny")
+            self.set_model(ModelType.ControlNetCanny,
+                           model_id="runwayml/stable-diffusion-v1-5", controlnet=controlnet)
             self.pipe.scheduler = DDIMScheduler.from_config(
                 self.pipe.scheduler.config)
             if use_cf_attn:
@@ -180,8 +184,10 @@ class Model:
                                 save_path=None):
         video_path = gradio_utils.motion_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetPose:
-            controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-openpose")
-            self.set_model(ModelType.ControlNetPose, model_id="runwayml/stable-diffusion-v1-5", controlnet=controlnet)
+            controlnet = ControlNetModel.from_pretrained(
+                "fusing/stable-diffusion-v1-5-controlnet-openpose")
+            self.set_model(ModelType.ControlNetPose,
+                           model_id="runwayml/stable-diffusion-v1-5", controlnet=controlnet)
             self.pipe.scheduler = DDIMScheduler.from_config(
                 self.pipe.scheduler.config)
             if use_cf_attn:
@@ -242,8 +248,10 @@ class Model:
         video_path = gradio_utils.get_video_from_canny_selection(video_path)
         # Load db and controlnet weights
         if 'db_path' not in self.states or db_path != self.states['db_path']:
-            controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny")
-            self.set_model(ModelType.ControlNetCannyDB, model_id=db_path, controlnet=controlnet)
+            controlnet = ControlNetModel.from_pretrained(
+                "lllyasviel/sd-controlnet-canny")
+            self.set_model(ModelType.ControlNetCannyDB,
+                           model_id=db_path, controlnet=controlnet)
             self.pipe.scheduler = DDIMScheduler.from_config(
                 self.pipe.scheduler.config)
             self.states['db_path'] = db_path
@@ -320,7 +328,7 @@ class Model:
 
     def process_text2video(self,
                            prompt,
-                           model_name,
+                           model_name="dreamlike-art/dreamlike-photoreal-2.0",
                            motion_field_strength_x=12,
                            motion_field_strength_y=12,
                            t0=44,
@@ -340,8 +348,10 @@ class Model:
                            path=None):
 
         if self.model_type != ModelType.Text2Video:
-            unet = UNet2DConditionModel.from_pretrained(model_name, subfolder="unet")
-            self.set_model(ModelType.Text2Video, model_id=model_name, unet=unet)
+            unet = UNet2DConditionModel.from_pretrained(
+                model_name, subfolder="unet")
+            self.set_model(ModelType.Text2Video,
+                           model_id=model_name, unet=unet)
             self.pipe.scheduler = DDIMScheduler.from_config(
                 self.pipe.scheduler.config)
             if use_cf_attn:

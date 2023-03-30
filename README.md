@@ -15,7 +15,7 @@ Roberto Henschel,
 [Zhangyang Wang](https://www.ece.utexas.edu/people/faculty/atlas-wang), Shant Navasardyan, [Humphrey Shi](https://www.humphreyshi.com)
 </br>
 
-[Paper](https://arxiv.org/abs/2303.13439) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) | [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/PAIR/Text2Video-Zero) 
+[Paper](https://arxiv.org/abs/2303.13439) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) | [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/PAIR/Text2Video-Zero) | [Project](https://text2video-zero.github.io/)
 
 
 <p align="center">
@@ -32,7 +32,7 @@ Roberto Henschel,
 * [03/27/2023] The [full version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo released! Now also included: `text and pose conditional video generation`, `text and canny-edge conditional video generation`, and 
 `text, canny-edge and dreambooth conditional video generation`.
 * [03/28/2023] Code for all our generation methods released! We added a new low-memory setup. Minimum required GPU VRAM is currently **12 GB**. It will be further reduced in the upcoming releases. 
-* [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, any base model for stable diffusion hosted on huggingface can now be loaded (including dreambooth models!). (ii) The generated videos (text-to-video) can have arbitrary length. (iii) We improved the quality of Video Instruct-Pix2Pix. (iv) We added two longer examples for Video Instruct-Pix2Pix.   
+* [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, **any base model for stable diffusion** and **any dreambooth model** hosted on huggingface can now be loaded! (ii) The generated videos (text-to-video) can have arbitrary length. (iii) We improved the quality of Video Instruct-Pix2Pix. (iv) We added two longer examples for Video Instruct-Pix2Pix.   
 * [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`.
 
 
@@ -145,6 +145,17 @@ params = {"t0": 44, "t1": 47 , "motion_field_strength_x" : 12, "motion_field_str
 out_path, fps = f"./text2video_{prompt.replace(' ','_')}.mp4", 4
 model.process_text2video(prompt, fps = fps, path = out_path, **params)
 ```
+
+To use a different stable diffusion base model run this python command:
+```python
+from hf_utils import get_model_list
+model_list = get_model_list()
+for idx, name in enumerate(model_list):
+  print(idx, name)
+idx = int(input("Select the model by the listed number: ")) # select the model of your choice
+model.process_text2video(prompt, model_name = model_list[idx], fps = fps, path = out_path, **params)
+```
+
 
 #### Hyperparameters (Optional)
 
@@ -426,7 +437,12 @@ For security information about public access we refer to the documentation of [g
 </table>
 
 
+## Related Links 
 
+* [High-Resolution Image Synthesis with Latent Diffusion Models (a.k.a. LDM & Stable Diffusion)](https://ommer-lab.com/research/latent-diffusion-models/)
+* [InstructPix2Pix: Learning to Follow Image Editing Instructions](https://www.timothybrooks.com/instruct-pix2pix/)
+* [Adding Conditional Control to Text-to-Image Diffusion Models (a.k.a ControlNet)](https://github.com/lllyasviel/ControlNet)
+* [Diffusers](https://github.com/huggingface/diffusers)
 
 ## License
 Our code is published under the CreativeML Open RAIL-M license. The license provided in this repository applies to all additions and contributions we make upon the original stable diffusion code. The original stable diffusion code is under the CreativeML Open RAIL-M license, which can found [here](https://github.com/CompVis/stable-diffusion/blob/main/LICENSE).
