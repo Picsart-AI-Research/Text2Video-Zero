@@ -89,23 +89,6 @@ class TextToVideoPipeline(StableDiffusionPipeline):
         latents = latents * self.scheduler.init_noise_sigma
         return latents
 
-    def warp_latents_from_f0(self, latents, reference_flow):
-        _, _, H, W = reference_flow.size()
-        b, c, f, h, w = latents.size()
-        coords0 = coords_grid(f, H, W, device=latents.device).to(latents.dtype)
-        coords_t0 = coords0 + reference_flow
-        coords_t0[:, 0] /= W
-        coords_t0[:, 1] /= H
-        coords_t0 = coords_t0 * 2.0 - 1.0
-        coords_t0 = T.Resize((h, w))(coords_t0)
-        coords_t0 = rearrange(coords_t0, 'f c h w -> f h w c')
-        latents_0 = latents[:, :, 0]
-        latents_0 = latents_0.repeat(f, 1, 1, 1)
-        warped = grid_sample(latents_0, coords_t0,
-                             mode='nearest', padding_mode='reflection')
-        warped = rearrange(warped, '(b f) c h w -> b c f h w', f=f)
-        return warped
-
     def warp_latents_independently(self, latents, reference_flow, inject_noise=False):
         _, _, H, W = reference_flow.size()
         b, _, f, h, w = latents.size()
