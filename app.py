@@ -86,5 +86,8 @@ with gr.Blocks(css='style.css') as demo:
 
 
 _, _, link = demo.queue(api_open=False).launch(
-    file_directories=['temporal'], share=args.public_access or on_huggingspace)
+    file_directories=['temporal'], share=args.public_access)
 print(link)
+
+
+https: // huggingface.co/spaces/PAIR/Text2Video-Zero?logs = container
