@@ -10,6 +10,8 @@ from text_to_video_pipeline import TextToVideoPipeline
 
 import utils
 import gradio_utils
+import os
+on_huggingspace = os.environ.get("SPACE_AUTHOR_NAME") == "PAIR"
 
 
 class ModelType(Enum):
@@ -92,6 +94,8 @@ class Model:
         prompt = [kwargs.pop('prompt')] * f
         negative_prompt = [kwargs.pop('negative_prompt', '')] * f
 
+        frames_counter = 0
+
         # Processing chunk-by-chunk
         if split_to_chunks:
             chunk_ids = np.arange(0, f, chunk_size - 1)
@@ -106,6 +110,9 @@ class Model:
                                                    prompt=prompt,
                                                    negative_prompt=negative_prompt,
                                                    **kwargs).images[1:])
+                frames_counter += len(chunk_ids)-1
+                if on_huggingspace and frames_counter >= 80:
+                    break
             result = np.concatenate(result)
             return result
         else:
