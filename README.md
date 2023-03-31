@@ -32,8 +32,8 @@ Roberto Henschel,
 * [03/27/2023] The [full version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo released! Now also included: `text and pose conditional video generation`, `text and canny-edge conditional video generation`, and 
 `text, canny-edge and dreambooth conditional video generation`.
 * [03/28/2023] Code for all our generation methods released! We added a new low-memory setup. Minimum required GPU VRAM is currently **12 GB**. It will be further reduced in the upcoming releases. 
-* [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, **any base model for stable diffusion** and **any dreambooth model** hosted on huggingface can now be loaded! (ii) The generated videos (text-to-video) can have arbitrary length. (iii) We improved the quality of Video Instruct-Pix2Pix. (iv) We added two longer examples for Video Instruct-Pix2Pix.   
-* [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`.
+* [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, **any base model for stable diffusion** and **any dreambooth model** hosted on huggingface can now be loaded! (ii) We improved the quality of Video Instruct-Pix2Pix. (iii) We added two longer examples for Video Instruct-Pix2Pix.   
+* [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`. In addition, generated videos (text-to-video) can have **arbitrary length**. 
 
 
 ## Contribute
@@ -55,7 +55,7 @@ To achieve this goal, all contributions are welcome. Please check out these exte
 git clone https://github.com/Picsart-AI-Research/Text2Video-Zero.git
 cd Text2Video-Zero/
 ```
-2. Install requirements using Python 3.9
+2. Install requirements using Python 3.9 and CUDA >= 11.6
 ```shell
 virtualenv --system-site-packages -p python3.9 venv
 source venv/bin/activate
@@ -107,15 +107,16 @@ mkdir -p models/control
 wget -P models/control https://huggingface.co/lllyasviel/ControlNet/resolve/main/models/control_sd15_canny.pth 
 ```
 
---->
+
+### Weights
 
 
 #### Text-To-Video with Edge Guidance and Dreambooth
 
-Integrate a `SD1.4` Dreambooth model into ControlNet using [this](https://github.com/lllyasviel/ControlNet/discussions/12) procedure. Load the model into `models/control_db/`. Dreambooth models can be obtained, for instance, from [CIVITAI](https://civitai.com). 
 
 
 We provide already prepared model files derived from CIVITAI for `anime` (keyword `1girl`), `arcane style` (keyword `arcane style`) `avatar` (keyword `avatar style`) and `gta-5 style`  (keyword `gtav style`). 
+--->
 
 <!---
 To this end, download the model files from [google drive](https://drive.google.com/drive/folders/1uwXNjJ-4Ws6pqyjrIWyVPWu_u4aJrqt8?usp=share_link) and extract them into `models/control_db/`.
@@ -213,9 +214,11 @@ model.process_controlnet_canny_db(dreambooth_model_path, video_path, prompt=prom
 The value `video_path` can be the path to a `mp4` file. To use one of the example videos provided, set `video_path="woman1"`, `video_path="woman2"`, `video_path="woman3"`, or `video_path="man1"`. 
  
 
-The value `dreambooth_model_path` can either be a link to a diffuser model file, or the name of one of the dreambooth models provided. To this end, set `dreambooth_model_path = "Anime DB"`, `dreambooth_model_path = "Avatar DB"`, `dreambooth_model_path = "GTA-5 DB"`, or `dreambooth_model_path = "Arcane DB"`.  The corresponding keywords are: `1girl` (for `Anime DB`), `arcane style` (for `Arcane DB`) `avatar style` (for `Avatar DB`) and `gta-5 style`  (for `GTA-5 DB`).
+The value `dreambooth_model_path` can either be a link to a diffuser model file, or the name of one of the dreambooth models provided. To this end, set `dreambooth_model_path = "Anime DB"`, `dreambooth_model_path = "Avatar DB"`, `dreambooth_model_path = "GTA-5 DB"`, or `dreambooth_model_path = "Arcane DB"`.  The corresponding keywords are: `1girl` (for `Anime DB`), `arcane style` (for `Arcane DB`) `avatar style` (for `Avatar DB`) and `gtav style`  (for `GTA-5 DB`).
 
-If the model file is not in diffuser format, it must be [converted](https://github.com/huggingface/diffusers/blob/main/scripts/convert_original_stable_diffusion_to_diffusers.py). 
+
+To load custom Dreambooth models, [transfer](https://github.com/lllyasviel/ControlNet/discussions/12) control to the custom model and  [convert](https://github.com/huggingface/diffusers/blob/main/scripts/convert_original_stable_diffusion_to_diffusers.py) it to diffuser format. Then, the value of `dreambooth_model_path` must link to the folder containing the diffuser file. Dreambooth models can be obtained, for instance, from [CIVITAI](https://civitai.com). 
+
 
 
 ---
