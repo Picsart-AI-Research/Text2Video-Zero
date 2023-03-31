@@ -318,7 +318,7 @@ For security information about public access we refer to the documentation of [g
   <td width=25% align="center">"A tiger walking alone down the street"</td>
   <td width=25% align="center">"A panda surfing on a wakeboard"</td>
   <td width=25% align="center">"A horse galloping on a street"</td>
-  <td width=25% align="center">"A cute cat running in a beatiful meadow"</td>
+  <td width=25% align="center">"A cute cat running in a beautiful meadow"</td>
 </tr>
 
 
