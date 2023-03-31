@@ -64,13 +64,13 @@ def get_video_from_canny_selection(canny_selection):
 
 def get_model_from_db_selection(db_selection):
     if db_selection == "Anime DB":
-        input_video_path = 'PAIR/controlnet-canny-anime'
+        input_video_path = 'PAIR/text2video-zero-controlnet-canny-anime'
     elif db_selection == "Avatar DB":
-        input_video_path = 'PAIR/controlnet-canny-avatar'
+        input_video_path = 'PAIR/text2video-zero-controlnet-canny-avatar'
     elif db_selection == "GTA-5 DB":
-        input_video_path = 'PAIR/controlnet-canny-gta5'
+        input_video_path = 'PAIR/text2video-zero-controlnet-canny-gta5'
     elif db_selection == "Arcane DB":
-        input_video_path = 'PAIR/controlnet-canny-arcane'
+        input_video_path = 'PAIR/text2video-zero-controlnet-canny-arcane'
     else:
         input_video_path = db_selection
 
