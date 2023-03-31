@@ -31,7 +31,7 @@ def create_demo(model: Model):
                 """
                 <div style="text-align: left; auto;">
                 <h2 style="font-weight: 450; font-size: 1rem; margin: 0rem">
-                    Description: For performance purposes, our current preview release supports any input videos but caps output videos to no longer than 15 seconds and the input videos are scaled down before processing.
+                    Description: For performance purposes, our current preview release supports any input videos but caps output videos after 80 frames and the input videos are scaled down before processing.
                 </h3>
                 </div>
                 """)
@@ -47,7 +47,7 @@ def create_demo(model: Model):
                     watermark = gr.Radio(["Picsart AI Research", "Text2Video-Zero",
                                          "None"], label="Watermark", value='Picsart AI Research')
                     chunk_size = gr.Slider(
-                        label="Chunk size", minimum=2, maximum=8, value=8, step=1, visible=not on_huggingspace)
+                        label="Chunk size", minimum=2, maximum=16, value=12 if on_huggingspace else 8, step=1, visible=not on_huggingspace)
             with gr.Column():
                 result = gr.Video(label="Generated Video").style(height="auto")
 

@@ -28,7 +28,7 @@ def create_demo(model: Model):
                 """
                 <div style="text-align: left; auto;">
                 <h2 style="font-weight: 450; font-size: 1rem; margin: 0rem">
-                    Description: Simply input <b>any textual prompt</b> to generate videos right away and unleash your creativity and imagination! You can also select from the examples below. For performance purposes, our current preview release by default generates only 8 output frames and output 4s videos, but you can increase it from Advanced Options.
+                    Description: Simply input <b>any textual prompt</b> to generate videos right away and unleash your creativity and imagination! You can also select from the examples below. For performance purposes, our current preview release allows to generate up to 16 frames, which can be configured in the Advanced Options.
                 </h3>
                 </div>
                 """)
@@ -46,10 +46,14 @@ def create_demo(model: Model):
                     watermark = gr.Radio(["Picsart AI Research", "Text2Video-Zero",
                                          "None"], label="Watermark", value='Picsart AI Research')
 
-                    video_length = gr.Number(
-                        label="Video length", value=8, precision=0)
+                    if on_huggingspace:
+                        video_length = gr.Slider(
+                            label="Video length", minimum=8, maximum=16, step=1)
+                    else:
+                        video_length = gr.Number(
+                            label="Video length", value=8, precision=0)
                     chunk_size = gr.Slider(
-                        label="Chunk size", minimum=2, maximum=32, value=8, step=1, visible=not on_huggingspace)
+                        label="Chunk size", minimum=2, maximum=16, value=12 if on_huggingspace else 8, step=1, visible=not on_huggingspace)
 
                     motion_field_strength_x = gr.Slider(
                         label='Global Translation $\delta_{x}$', minimum=-20, maximum=20, value=12, step=1)
@@ -84,6 +88,7 @@ def create_demo(model: Model):
                     outputs=result,
                     fn=model.process_text2video,
                     run_on_click=False,
+                    cache_examples=on_huggingspace,
                     )
 
         run_button.click(fn=model.process_text2video,

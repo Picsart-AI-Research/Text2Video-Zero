@@ -35,7 +35,7 @@ def create_demo(model: Model):
                     watermark = gr.Radio(["Picsart AI Research", "Text2Video-Zero",
                                          "None"], label="Watermark", value='Picsart AI Research')
                     chunk_size = gr.Slider(
-                        label="Chunk size", minimum=2, maximum=8, value=8, step=1, visible=not on_huggingspace)
+                        label="Chunk size", minimum=2, maximum=16, value=12 if on_huggingspace else 8, step=1, visible=not on_huggingspace)
             with gr.Column():
                 result = gr.Image(label="Generated Video")
 
