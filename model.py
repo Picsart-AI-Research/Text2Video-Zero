@@ -1,7 +1,7 @@
 from enum import Enum
 import gc
 import numpy as np
-
+import tomesd
 import torch
 
 from diffusers import StableDiffusionInstructPix2PixPipeline, StableDiffusionControlNetPipeline, ControlNetModel, UNet2DConditionModel
@@ -45,6 +45,7 @@ class Model:
         self.model_type = None
 
         self.states = {}
+        self.model_name = ""
 
     def set_model(self, model_type: ModelType, model_id: str, **kwargs):
         if self.pipe is not None:
@@ -55,6 +56,7 @@ class Model:
         self.pipe = self.pipe_dict[model_type].from_pretrained(
             model_id, safety_checker=safety_checker, **kwargs).to(self.device).to(self.dtype)
         self.model_type = model_type
+        self.model_name = model_id
 
     def inference_chunk(self, frame_ids, **kwargs):
         if self.pipe is None:
@@ -80,6 +82,13 @@ class Model:
     def inference(self, split_to_chunks=False, chunk_size=8, **kwargs):
         if self.pipe is None:
             return
+        tomesd.remove_patch(self.pipe)
+        if "merging_ratio" in kwargs:
+            merging_ratio = kwargs.pop("merging_ratio")
+
+            if merging_ratio > 0:
+
+                tomesd.apply_patch(self.pipe, ratio=merging_ratio)
         seed = kwargs.pop('seed', 0)
         if seed < 0:
             seed = self.generator.seed()
@@ -116,6 +125,7 @@ class Model:
             result = np.concatenate(result)
             return result
         else:
+            self.generator.manual_seed(seed)
             return self.pipe(prompt=prompt, negative_prompt=negative_prompt, generator=self.generator, **kwargs).images
 
     def process_controlnet_canny(self,
@@ -123,6 +133,7 @@ class Model:
                                  prompt,
                                  chunk_size=8,
                                  watermark='Picsart AI Research',
+                                 merging_ratio=0.0,
                                  num_inference_steps=20,
                                  controlnet_conditioning_scale=1.0,
                                  guidance_scale=9.0,
@@ -173,6 +184,7 @@ class Model:
                                 output_type='numpy',
                                 split_to_chunks=True,
                                 chunk_size=chunk_size,
+                                merging_ratio=merging_ratio,
                                 )
         return utils.create_video(result, fps, path=save_path, watermark=gradio_utils.logo_name_to_path(watermark))
 
@@ -181,6 +193,7 @@ class Model:
                                 prompt,
                                 chunk_size=8,
                                 watermark='Picsart AI Research',
+                                merging_ratio=0.0,
                                 num_inference_steps=20,
                                 controlnet_conditioning_scale=1.0,
                                 guidance_scale=9.0,
@@ -232,6 +245,7 @@ class Model:
                                 output_type='numpy',
                                 split_to_chunks=True,
                                 chunk_size=chunk_size,
+                                merging_ratio=merging_ratio,
                                 )
         return utils.create_gif(result, fps, path=save_path, watermark=gradio_utils.logo_name_to_path(watermark))
 
@@ -241,6 +255,7 @@ class Model:
                                     prompt,
                                     chunk_size=8,
                                     watermark='Picsart AI Research',
+                                    merging_ratio=0.0,
                                     num_inference_steps=20,
                                     controlnet_conditioning_scale=1.0,
                                     guidance_scale=9.0,
@@ -295,6 +310,7 @@ class Model:
                                 output_type='numpy',
                                 split_to_chunks=True,
                                 chunk_size=chunk_size,
+                                merging_ratio=merging_ratio,
                                 )
         return utils.create_gif(result, fps, path=save_path, watermark=gradio_utils.logo_name_to_path(watermark))
 
@@ -309,6 +325,7 @@ class Model:
                         out_fps=-1,
                         chunk_size=8,
                         watermark='Picsart AI Research',
+                        merging_ratio=0.0,
                         use_cf_attn=True,
                         save_path=None,):
         if self.model_type != ModelType.Pix2Pix_Video:
@@ -330,6 +347,7 @@ class Model:
                                 image_guidance_scale=image_guidance_scale,
                                 split_to_chunks=True,
                                 chunk_size=chunk_size,
+                                merging_ratio=merging_ratio
                                 )
         return utils.create_video(result, fps, path=save_path, watermark=gradio_utils.logo_name_to_path(watermark))
 
@@ -344,9 +362,9 @@ class Model:
                            chunk_size=8,
                            video_length=8,
                            watermark='Picsart AI Research',
-                           inject_noise_to_warp=False,
+                           merging_ratio=0.0,
+                           seed=0,
                            resolution=512,
-                           seed=-1,
                            fps=2,
                            use_cf_attn=True,
                            use_motion_field=True,
@@ -354,7 +372,8 @@ class Model:
                            smooth_bg_strength=0.4,
                            path=None):
 
-        if self.model_type != ModelType.Text2Video:
+        if self.model_type != ModelType.Text2Video or model_name != self.model_name:
+            print("Model update")
             unet = UNet2DConditionModel.from_pretrained(
                 model_name, subfolder="unet")
             self.set_model(ModelType.Text2Video,
@@ -364,7 +383,7 @@ class Model:
             if use_cf_attn:
                 self.pipe.unet.set_attn_processor(
                     processor=self.text2video_attn_proc)
-            self.generator.manual_seed(seed)
+        self.generator.manual_seed(seed)
 
         added_prompt = "high quality, HD, 8K, trending on artstation, high focus, dramatic lighting"
         negative_prompts = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer difits, cropped, worst quality, low quality, deformed body, bloated, ugly, unrealistic'
@@ -396,8 +415,8 @@ class Model:
                                 seed=seed,
                                 output_type='numpy',
                                 negative_prompt=negative_prompt,
-                                inject_noise_to_warp=inject_noise_to_warp,
-                                split_to_chunks=True,
+                                merging_ratio=merging_ratio,
+                                split_to_chunks=False,
                                 chunk_size=chunk_size,
                                 )
         return utils.create_video(result, fps, path=path, watermark=gradio_utils.logo_name_to_path(watermark))
