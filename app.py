@@ -19,6 +19,7 @@ args = parser.parse_args()
 
 
 with gr.Blocks(css='style.css') as demo:
+
     gr.HTML(
         """
         <div style="text-align: center; max-width: 1200px; margin: 20px auto;">
@@ -62,7 +63,8 @@ with gr.Blocks(css='style.css') as demo:
         create_demo_canny(model)
     with gr.Tab('Edge Conditional and Dreambooth Specialized'):
         create_demo_canny_db(model)
-
+    '''
+    '''
     gr.HTML(
         """
         <div style="text-align: justify; max-width: 1200px; margin: 20px auto;">
@@ -85,6 +87,10 @@ with gr.Blocks(css='style.css') as demo:
         """)
 
 
-_, _, link = demo.queue(api_open=False).launch(
-    file_directories=['temporal'], share=args.public_access)
-print(link)
+if on_huggingspace:
+    demo.queue(max_size=20)
+    demo.launch(debug=True)
+else:
+    _, _, link = demo.queue(api_open=False).launch(
+        file_directories=['temporal'], share=args.public_access)
+    print(link)
