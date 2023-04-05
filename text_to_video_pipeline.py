@@ -53,8 +53,10 @@ class TextToVideoPipeline(StableDiffusionPipeline):
         if x0 is None:
             return torch.randn(shape, generator=generator, device=rand_device, dtype=text_embeddings.dtype).to(device)
         else:
-            eps = torch.randn_like(x0, dtype=text_embeddings.dtype).to(device)
+            eps = torch.randn(x0.shape, dtype=text_embeddings.dtype, generator=generator,
+                              device=rand_device)
             alpha_vec = torch.prod(self.scheduler.alphas[t0:tMax])
+
             xt = torch.sqrt(alpha_vec) * x0 + \
                 torch.sqrt(1-alpha_vec) * eps
             return xt
@@ -89,7 +91,7 @@ class TextToVideoPipeline(StableDiffusionPipeline):
         latents = latents * self.scheduler.init_noise_sigma
         return latents
 
-    def warp_latents_independently(self, latents, reference_flow, inject_noise=False):
+    def warp_latents_independently(self, latents, reference_flow):
         _, _, H, W = reference_flow.size()
         b, _, f, h, w = latents.size()
         assert b == 1
@@ -108,15 +110,6 @@ class TextToVideoPipeline(StableDiffusionPipeline):
         latents_0 = rearrange(latents[0], 'c f h w -> f  c  h w')
         warped = grid_sample(latents_0, coords_t0,
                              mode='nearest', padding_mode='reflection')
-
-        if inject_noise:
-            idx = torch.logical_or(coords_t0 >= 1, coords_t0 < -1)
-            reset_noise = torch.randn(idx.shape)
-            idx = torch.logical_or(idx[:, :, :, 0], idx[:, :, :, 1])
-            idx = repeat(idx, "f w h -> f c w h", c=warped.shape[1])
-            reset_noise = torch.randn(
-                size=warped.shape, dtype=warped.dtype, device=warped.device)
-            warped[idx] = reset_noise[idx]
 
         warped = rearrange(warped, '(b f) c h w -> b c f h w', f=f)
         return warped
@@ -212,20 +205,20 @@ class TextToVideoPipeline(StableDiffusionPipeline):
 
         reference_flow = torch.zeros(
             (video_length-1, 2, 512, 512), device=latents.device, dtype=latents.dtype)
-        for fr_idx in range(video_length-1):
+        for fr_idx, frame_id in enumerate(frame_ids):
             reference_flow[fr_idx, 0, :,
-                           :] = motion_field_strength_x*(frame_ids[fr_idx]+1)
+                           :] = motion_field_strength_x*(frame_id)
             reference_flow[fr_idx, 1, :,
-                           :] = motion_field_strength_y*(frame_ids[fr_idx]+1)
+                           :] = motion_field_strength_y*(frame_id)
         return reference_flow
 
-    def create_motion_field_and_warp_latents(self, motion_field_strength_x, motion_field_strength_y, frame_ids, video_length, inject_noise_to_warp, latents):
+    def create_motion_field_and_warp_latents(self, motion_field_strength_x, motion_field_strength_y, frame_ids, video_length, latents):
 
         motion_field = self.create_motion_field(motion_field_strength_x=motion_field_strength_x,
                                                 motion_field_strength_y=motion_field_strength_y, latents=latents, video_length=video_length, frame_ids=frame_ids)
         for idx, latent in enumerate(latents):
             latents[idx] = self.warp_latents_independently(
-                latent[None], motion_field, inject_noise=inject_noise_to_warp)
+                latent[None], motion_field)
         return motion_field, latents
 
     @torch.no_grad()
@@ -255,7 +248,6 @@ class TextToVideoPipeline(StableDiffusionPipeline):
         use_motion_field: bool = True,
         smooth_bg: bool = False,
         smooth_bg_strength: float = 0.4,
-        inject_noise_to_warp: bool = False,
         t0: int = 44,
         t1: int = 47,
         **kwargs,
@@ -280,11 +272,6 @@ class TextToVideoPipeline(StableDiffusionPipeline):
         prompt = prompt_types[0]
         negative_prompt = prompt_types[1]
 
-        print(
-            f" Motion field strength x = {motion_field_strength_x}, y = {motion_field_strength_y}")
-        print(f" Use: Motion field = {use_motion_field}")
-        print(f" Use: Background smoothing = {smooth_bg}")
-        print(f"Inject noise to warp =  {inject_noise_to_warp}")
         # Default height and width to unet
         height = height or self.unet.config.sample_size * self.vae_scale_factor
         width = width or self.unet.config.sample_size * self.vae_scale_factor
@@ -355,6 +342,7 @@ class TextToVideoPipeline(StableDiffusionPipeline):
 
         t0 = timesteps_ddpm[t0]
         t1 = timesteps_ddpm[t1]
+
         print(f"t0 = {t0} t1 = {t1}")
         x_t1_1 = None
 
@@ -366,14 +354,6 @@ class TextToVideoPipeline(StableDiffusionPipeline):
 
         shape = (batch_size, num_channels_latents, 1, height //
                  self.vae_scale_factor, width // self.vae_scale_factor)
-        if inject_noise_to_warp and use_motion_field:
-            # if we inject to noise to warp function, we do it for timesteps T = 1000
-
-            x_t0_k = xT[:, :, :1, :, :].repeat(1, 1, video_length-1, 1, 1)
-
-            # reference_flow, x_t0_k = self.create_motion_field_and_warp_latents(motion_field_strength_x=motion_field_strength_x, motion_field_strength_y=motion_field_strength_y,
-            #                                                                   frame_ids=frame_ids,video_length=video_length,inject_noise_to_warp=inject_noise_to_warp,latents = x_t0_k)
-            # xT =torch.cat([xT, x_t0_k], dim=2).clone().detach()
 
         ddim_res = self.DDIM_backward(num_inference_steps=num_inference_steps, timesteps=timesteps, skip_t=1000, t0=t0, t1=t1, do_classifier_free_guidance=do_classifier_free_guidance,
                                       null_embs=null_embs, text_embeddings=text_embeddings, latents_local=xT, latents_dtype=dtype, guidance_scale=guidance_scale, guidance_stop_step=guidance_stop_step,
@@ -387,37 +367,13 @@ class TextToVideoPipeline(StableDiffusionPipeline):
             x_t1_1 = ddim_res["x_t1_1"].detach()
         del ddim_res
         del xT
-
-        if inject_noise_to_warp and use_motion_field:
-            # DDPM forward to allow for more motion
-            if t1 > t0:
-                x_t1_k = self.DDPM_forward(
-                    x0=x_t0_1, t0=t0, tMax=t1, device=device, shape=shape, text_embeddings=text_embeddings, generator=generator)
-            else:
-                x_t1_k = x_t0_k
-
-            if x_t1_1 is None:
-                raise Exception
-
-            x_t1 = x_t1_k.clone().detach()
-
-            ddim_res = self.DDIM_backward(num_inference_steps=num_inference_steps, timesteps=timesteps, skip_t=t1, t0=-1, t1=-1, do_classifier_free_guidance=do_classifier_free_guidance,
-                                          null_embs=null_embs, text_embeddings=text_embeddings, latents_local=x_t1, latents_dtype=dtype, guidance_scale=guidance_scale, guidance_stop_step=guidance_stop_step,
-                                          callback=callback, callback_steps=callback_steps, extra_step_kwargs=extra_step_kwargs, num_warmup_steps=num_warmup_steps)
-
-            x0 = ddim_res["x0"].detach()
-            del ddim_res
-            del x_t1
-            del x_t1_k
-
-        if use_motion_field and not inject_noise_to_warp:
+        if use_motion_field:
             del x0
 
             x_t0_k = x_t0_1[:, :, :1, :, :].repeat(1, 1, video_length-1, 1, 1)
 
             reference_flow, x_t0_k = self.create_motion_field_and_warp_latents(
-                motion_field_strength_x=motion_field_strength_x, motion_field_strength_y=motion_field_strength_y, latents=x_t0_k, video_length=video_length,
-                inject_noise_to_warp=inject_noise_to_warp, frame_ids=frame_ids)
+                motion_field_strength_x=motion_field_strength_x, motion_field_strength_y=motion_field_strength_y, latents=x_t0_k, video_length=video_length, frame_ids=frame_ids[1:])
 
             # assuming t0=t1=1000, if t0 = 1000
             if t1 > t0:
@@ -440,7 +396,6 @@ class TextToVideoPipeline(StableDiffusionPipeline):
             del x_t1
             del x_t1_1
             del x_t1_k
-
         else:
             x_t1 = x_t1_1.clone()
             x_t1_1 = x_t1_1[:, :, :1, :, :].clone()
@@ -481,7 +436,7 @@ class TextToVideoPipeline(StableDiffusionPipeline):
                 if use_motion_field:
                     x_t1_fg_masked_b = x_t1_fg_masked_b[None]
                     x_t1_fg_masked_b = self.warp_latents_independently(
-                        x_t1_fg_masked_b, reference_flow, inject_noise=False)
+                        x_t1_fg_masked_b, reference_flow)
                 else:
                     x_t1_fg_masked_b = x_t1_fg_masked_b[None]
 
@@ -499,7 +454,7 @@ class TextToVideoPipeline(StableDiffusionPipeline):
                 m_fg_b = m_fg_1_b.repeat(1, 1, video_length-1, 1, 1)
                 if use_motion_field:
                     m_fg_b = self.warp_latents_independently(
-                        m_fg_b.clone(), reference_flow, inject_noise=False)
+                        m_fg_b.clone(), reference_flow)
                 M_FG_warped.append(
                     torch.cat([m_fg_1_b[:1, 0], m_fg_b[:1, 0]], dim=1))
 
