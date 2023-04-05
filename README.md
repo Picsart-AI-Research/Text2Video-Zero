@@ -34,6 +34,7 @@ Roberto Henschel,
 * [03/28/2023] Code for all our generation methods released! We added a new low-memory setup. Minimum required GPU VRAM is currently **12 GB**. It will be further reduced in the upcoming releases. 
 * [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, **any base model for stable diffusion** and **any dreambooth model** hosted on huggingface can now be loaded! (ii) We improved the quality of Video Instruct-Pix2Pix. (iii) We added two longer examples for Video Instruct-Pix2Pix.   
 * [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`. In addition, generated videos (text-to-video) can have **arbitrary length**. 
+* [05/04/2023] We integrated [Token Merging](https://github.com/dbolya/tomesd) into our code. In the most aggressive setup, our code can run with less than 7 GB VRAM.  
 
 
 ## Contribute
@@ -244,9 +245,10 @@ To reduce the memory usage, add `chunk_size=k` as additional parameter when call
 
 When using the gradio app, set `chunk_size` in the `Advanced options`. 
 
+Thanks to the great work of [Token Merging](https://arxiv.org/abs/2303.17604), the memory usage can be further reduced. It can be configured using the  `merging_ratio` parameter with values in `[0,1]`. The higher the value, the more compression is applied (leading to faster inference and less memory requirements). Be aware that too high values will decrease the image quality. 
 
-We plan to release soon a new version that further reduces the memory usage. 
-
+ 
+We plan to continue optimizing our code to enable even lower memory consumption.
 
 ---
 
