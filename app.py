@@ -23,7 +23,7 @@ with gr.Blocks(css='style.css') as demo:
         """
         <div style="text-align: center; max-width: 1200px; margin: 20px auto;">
         <h1 style="font-weight: 900; font-size: 3rem; margin: 0rem">
-            Text2Video-Zero
+            <a href="https://github.com/Picsart-AI-Research/Text2Video-Zero" style="color:blue;">Text2Video-Zero</a> 
         </h1>
         <h2 style="font-weight: 450; font-size: 1rem; margin: 0rem">
         Levon Khachatryan<sup>1*</sup>, Andranik Movsisyan<sup>1*</sup>, Vahram Tadevosyan<sup>1*</sup>, Roberto Henschel<sup>1*</sup>, Zhangyang Wang<sup>1,2</sup>, Shant Navasardyan<sup>1</sup>

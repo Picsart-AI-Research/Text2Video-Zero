@@ -36,6 +36,8 @@ def create_demo(model: Model):
                                          "None"], label="Watermark", value='Picsart AI Research')
                     chunk_size = gr.Slider(
                         label="Chunk size", minimum=2, maximum=16, value=12 if on_huggingspace else 8, step=1, visible=not on_huggingspace)
+                    merging_ratio = gr.Slider(
+                        label="Merging ratio", minimum=0.0, maximum=0.9, step=0.1, value=0.0, visible=not on_huggingspace)
             with gr.Column():
                 result = gr.Image(label="Generated Video")
 
@@ -48,6 +50,7 @@ def create_demo(model: Model):
             prompt,
             chunk_size,
             watermark,
+            merging_ratio,
         ]
 
         gr.Examples(examples=examples,

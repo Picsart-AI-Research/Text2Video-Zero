@@ -48,9 +48,10 @@ def create_demo(model: Model):
                                                  value=512,
                                                  step=64)
                     seed = gr.Slider(label='Seed',
-                                     minimum=0,
+                                     minimum=-1,
                                      maximum=65536,
                                      value=0,
+                                     info="-1 for random seed on each run. Otherwise the seed will be fixed",
                                      step=1)
                     image_guidance = gr.Slider(label='Image guidance scale',
                                                minimum=0.5,
@@ -73,7 +74,11 @@ def create_demo(model: Model):
                                         value=-1,
                                         step=1)
                     chunk_size = gr.Slider(
-                        label="Chunk size", minimum=2, maximum=16, value=12 if on_huggingspace else 8, step=1, visible=not on_huggingspace)
+                        label="Chunk size", minimum=2, maximum=16, value=12 if on_huggingspace else 8, step=1, visible=not on_huggingspace,
+                        info="Number of frames processed at once. Reduce for lower memory usage.")
+                    merging_ratio = gr.Slider(
+                        label="Merging ratio", minimum=0.0, maximum=0.9, step=0.1, value=0.0, visible=not on_huggingspace,
+                        info="Ratio of how many tokens are merged. The higher the more compression (less memory and faster inference).")
             with gr.Column():
                 result = gr.Video(label='Output', show_label=True)
         inputs = [
@@ -86,7 +91,8 @@ def create_demo(model: Model):
             end_t,
             out_fps,
             chunk_size,
-            watermark
+            watermark,
+            merging_ratio
         ]
 
         gr.Examples(examples=examples,
