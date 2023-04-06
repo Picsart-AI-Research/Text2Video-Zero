@@ -48,7 +48,7 @@ class Model:
         self.model_name = ""
 
     def set_model(self, model_type: ModelType, model_id: str, **kwargs):
-        if self.pipe is not None:
+        if hasattr(self, "pipe") and self.pipe is not None:
             del self.pipe
         torch.cuda.empty_cache()
         gc.collect()
@@ -59,7 +59,7 @@ class Model:
         self.model_name = model_id
 
     def inference_chunk(self, frame_ids, **kwargs):
-        if self.pipe is None:
+        if not hasattr(self, "pipe") or self.pipe is None:
             return
 
         prompt = np.array(kwargs.pop('prompt'))
@@ -80,15 +80,14 @@ class Model:
                          **kwargs)
 
     def inference(self, split_to_chunks=False, chunk_size=8, **kwargs):
-        if self.pipe is None:
+        if not hasattr(self, "pipe") or self.pipe is None:
             return
-        tomesd.remove_patch(self.pipe)
+
         if "merging_ratio" in kwargs:
             merging_ratio = kwargs.pop("merging_ratio")
 
-            if merging_ratio > 0:
-
-                tomesd.apply_patch(self.pipe, ratio=merging_ratio)
+            # if merging_ratio > 0:
+            tomesd.apply_patch(self.pipe, ratio=merging_ratio)
         seed = kwargs.pop('seed', 0)
         if seed < 0:
             seed = self.generator.seed()
@@ -144,7 +143,7 @@ class Model:
                                  resolution=512,
                                  use_cf_attn=True,
                                  save_path=None):
-        print("Processing Canny")
+        print("Module Canny")
         video_path = gradio_utils.edge_path_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetCanny:
             controlnet = ControlNetModel.from_pretrained(
@@ -203,7 +202,7 @@ class Model:
                                 resolution=512,
                                 use_cf_attn=True,
                                 save_path=None):
-        print("Processing Pose")
+        print("Module Pose")
         video_path = gradio_utils.motion_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetPose:
             controlnet = ControlNetModel.from_pretrained(
@@ -268,7 +267,7 @@ class Model:
                                     resolution=512,
                                     use_cf_attn=True,
                                     save_path=None):
-        print("Processing Canny_DB")
+        print("Module Canny_DB")
         db_path = gradio_utils.get_model_from_db_selection(db_path)
         video_path = gradio_utils.get_video_from_canny_selection(video_path)
         # Load db and controlnet weights
@@ -331,7 +330,7 @@ class Model:
                         merging_ratio=0.0,
                         use_cf_attn=True,
                         save_path=None,):
-        print("Processing Pix2Pix")
+        print("Module Pix2Pix")
         if self.model_type != ModelType.Pix2Pix_Video:
             self.set_model(ModelType.Pix2Pix_Video,
                            model_id="timbrooks/instruct-pix2pix")
@@ -375,7 +374,7 @@ class Model:
                            smooth_bg=False,
                            smooth_bg_strength=0.4,
                            path=None):
-        print("Processing Text2Video")
+        print("Module Text2Video")
         if self.model_type != ModelType.Text2Video or model_name != self.model_name:
             print("Model update")
             unet = UNet2DConditionModel.from_pretrained(
