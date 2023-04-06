@@ -416,7 +416,7 @@ class Model:
                                 output_type='numpy',
                                 negative_prompt=negative_prompt,
                                 merging_ratio=merging_ratio,
-                                split_to_chunks=False,
+                                split_to_chunks=True,
                                 chunk_size=chunk_size,
                                 )
         return utils.create_video(result, fps, path=path, watermark=gradio_utils.logo_name_to_path(watermark))
