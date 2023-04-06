@@ -448,6 +448,7 @@ For security information about public access we refer to the documentation of [g
 * [InstructPix2Pix: Learning to Follow Image Editing Instructions](https://www.timothybrooks.com/instruct-pix2pix/)
 * [Adding Conditional Control to Text-to-Image Diffusion Models (a.k.a ControlNet)](https://github.com/lllyasviel/ControlNet)
 * [Diffusers](https://github.com/huggingface/diffusers)
+* [Token Merging for Stable Diffusion](https://github.com/dbolya/tomesd)
 
 ## License
 Our code is published under the CreativeML Open RAIL-M license. The license provided in this repository applies to all additions and contributions we make upon the original stable diffusion code. The original stable diffusion code is under the CreativeML Open RAIL-M license, which can found [here](https://github.com/CompVis/stable-diffusion/blob/main/LICENSE).
