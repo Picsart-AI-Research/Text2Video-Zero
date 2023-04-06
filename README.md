@@ -34,7 +34,7 @@ Roberto Henschel,
 * [03/28/2023] Code for all our generation methods released! We added a new low-memory setup. Minimum required GPU VRAM is currently **12 GB**. It will be further reduced in the upcoming releases. 
 * [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, **any base model for stable diffusion** and **any dreambooth model** hosted on huggingface can now be loaded! (ii) We improved the quality of Video Instruct-Pix2Pix. (iii) We added two longer examples for Video Instruct-Pix2Pix.   
 * [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`. In addition, generated videos (text-to-video) can have **arbitrary length**. 
-* [05/04/2023] We integrated [Token Merging](https://github.com/dbolya/tomesd) into our code. In the most aggressive setup, our code can run with less than 7 GB VRAM.  
+* [04/06/2023] We integrated [Token Merging](https://github.com/dbolya/tomesd) into our code. In the most aggressive setup, our code can run with less than 7 GB VRAM.  
 
 
 ## Contribute
