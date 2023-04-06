@@ -144,6 +144,7 @@ class Model:
                                  resolution=512,
                                  use_cf_attn=True,
                                  save_path=None):
+        print("Processing Canny")
         video_path = gradio_utils.edge_path_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetCanny:
             controlnet = ControlNetModel.from_pretrained(
@@ -202,6 +203,7 @@ class Model:
                                 resolution=512,
                                 use_cf_attn=True,
                                 save_path=None):
+        print("Processing Pose")
         video_path = gradio_utils.motion_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetPose:
             controlnet = ControlNetModel.from_pretrained(
@@ -266,6 +268,7 @@ class Model:
                                     resolution=512,
                                     use_cf_attn=True,
                                     save_path=None):
+        print("Processing Canny_DB")
         db_path = gradio_utils.get_model_from_db_selection(db_path)
         video_path = gradio_utils.get_video_from_canny_selection(video_path)
         # Load db and controlnet weights
@@ -328,6 +331,7 @@ class Model:
                         merging_ratio=0.0,
                         use_cf_attn=True,
                         save_path=None,):
+        print("Processing Pix2Pix")
         if self.model_type != ModelType.Pix2Pix_Video:
             self.set_model(ModelType.Pix2Pix_Video,
                            model_id="timbrooks/instruct-pix2pix")
@@ -371,7 +375,7 @@ class Model:
                            smooth_bg=False,
                            smooth_bg_strength=0.4,
                            path=None):
-
+        print("Processing Text2Video")
         if self.model_type != ModelType.Text2Video or model_name != self.model_name:
             print("Model update")
             unet = UNet2DConditionModel.from_pretrained(

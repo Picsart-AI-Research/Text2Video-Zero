@@ -72,15 +72,15 @@ def create_demo(model: Model):
                         value=12,
                         step=1)
 
-                    t0 = gr.Slider(label="Timestep t0", minimum=12,
-                                   maximum=48, value=44, step=1,
-                                   info="Perform DDPM steps from t0 to t1. The larger the gap between t0 and t1, the more variance between the frames. ",
+                    t0 = gr.Slider(label="Timestep t0", minimum=0,
+                                   maximum=47, value=44, step=1,
+                                   info="Perform DDPM steps from t0 to t1. The larger the gap between t0 and t1, the more variance between the frames. Ensure t0 < t1 ",
                                    )
-                    t1 = gr.Slider(label="Timestep t1", minimum=12,
-                                   info="Perform DDPM steps from t0 to t1. The larger the gap between t0 and t1, the more variance between the frames.",
+                    t1 = gr.Slider(label="Timestep t1", minimum=1,
+                                   info="Perform DDPM steps from t0 to t1. The larger the gap between t0 and t1, the more variance between the frames. Ensure t0 < t1",
                                    maximum=48, value=47, step=1)
                     chunk_size = gr.Slider(
-                        label="Chunk size", minimum=2, maximum=16, value=12 if on_huggingspace else 8, step=1, visible=not on_huggingspace,
+                        label="Chunk size", minimum=2, maximum=16, value=8, step=1, visible=not on_huggingspace,
                         info="Number of frames processed at once. Reduce for lower memory usage."
                     )
                     merging_ratio = gr.Slider(
