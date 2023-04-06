@@ -79,15 +79,15 @@ def create_demo(model: Model):
                     t1 = gr.Slider(label="Timestep t1", minimum=12,
                                    info="Perform DDPM steps from t0 to t1. The larger the gap between t0 and t1, the more variance between the frames.",
                                    maximum=48, value=47, step=1)
-
-                    merging_ratio = gr.Slider(
-                        label="Merging ratio", minimum=0.0, maximum=0.9, step=0.1, value=0.0, visible=not on_huggingspace,
-                        info="Ratio of how many tokens are merged. The higher the more compression (less memory and faster inference)."
-                    )
                     chunk_size = gr.Slider(
                         label="Chunk size", minimum=2, maximum=16, value=12 if on_huggingspace else 8, step=1, visible=not on_huggingspace,
                         info="Number of frames processed at once. Reduce for lower memory usage."
                     )
+                    merging_ratio = gr.Slider(
+                        label="Merging ratio", minimum=0.0, maximum=0.9, step=0.1, value=0.0, visible=not on_huggingspace,
+                        info="Ratio of how many tokens are merged. The higher the more compression (less memory and faster inference)."
+                    )
+
             with gr.Column():
                 result = gr.Video(label="Generated Video")
 
