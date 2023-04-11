@@ -50,6 +50,7 @@ class Model:
     def set_model(self, model_type: ModelType, model_id: str, **kwargs):
         if hasattr(self, "pipe") and self.pipe is not None:
             del self.pipe
+            self.pipe = None
         torch.cuda.empty_cache()
         gc.collect()
         safety_checker = kwargs.pop('safety_checker', None)
