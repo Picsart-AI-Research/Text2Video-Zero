@@ -35,7 +35,7 @@ Roberto Henschel,
 * [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, **any base model for stable diffusion** and **any dreambooth model** hosted on huggingface can now be loaded! (ii) We improved the quality of Video Instruct-Pix2Pix. (iii) We added two longer examples for Video Instruct-Pix2Pix.   
 * [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`. In addition, generated videos (text-to-video) can have **arbitrary length**. 
 * [04/06/2023] We integrated [Token Merging](https://github.com/dbolya/tomesd) into our code. When the highest compression is used and chunk size set to `2`, our code can run with less than 7 GB VRAM.  
-* [05/11/2023] New code and Huggingface demo released! We integrated depth-guidance, based on [MiDaS](https://arxiv.org/pdf/1907.01341.pdf).
+* [05/11/2023] New code and Huggingface demo released! We integrated depth control, based on [MiDaS](https://arxiv.org/pdf/1907.01341.pdf).
 
 ## Contribute
 We are on a journey to democratize AI and empower the creativity of everyone, and we believe Text2Video-Zero is a great research direction to unleash the zero-shot video generation and editing capacity of the amazing text-to-image models!
@@ -236,7 +236,24 @@ out_path = f'./video_instruct_pix2pix_{prompt}.mp4'
 model.process_pix2pix(video_path, prompt=prompt, save_path=out_path)
 ```
 
+
 ---
+
+
+### Text-To-Video with Depth Control
+
+To directly call our text-to-video generator with depth control, run this python command:
+```python
+prompt = 'oil painting of a deer, a high-quality, detailed, and professional photo'
+video_path = '__assets__/depth_videos/deer.mp4'
+out_path = f'./text2video_depth_control_{prompt}.mp4'
+model.process_controlnet_canny(video_path, prompt=prompt, save_path=out_path)
+```
+
+
+---
+
+
 
 ### Low Memory Inference
 Each of the above introduced interface can be run in a low memory setup. In the minimal setup, a GPU with **12 GB VRAM** is sufficient. 
