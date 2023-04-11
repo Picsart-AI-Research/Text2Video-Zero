@@ -35,7 +35,7 @@ Roberto Henschel,
 * [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, **any base model for stable diffusion** and **any dreambooth model** hosted on huggingface can now be loaded! (ii) We improved the quality of Video Instruct-Pix2Pix. (iii) We added two longer examples for Video Instruct-Pix2Pix.   
 * [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`. In addition, generated videos (text-to-video) can have **arbitrary length**. 
 * [04/06/2023] We integrated [Token Merging](https://github.com/dbolya/tomesd) into our code. When the highest compression is used and chunk size set to `2`, our code can run with less than 7 GB VRAM.  
-* [05/11/2023] New code and Huggingface demo released! We integrated depth control, based on [MiDaS](https://arxiv.org/pdf/1907.01341.pdf).
+* [05/11/2023] New code and Huggingface demo released! We integrated **depth control**, based on [MiDaS](https://arxiv.org/pdf/1907.01341.pdf).
 
 ## Contribute
 We are on a journey to democratize AI and empower the creativity of everyone, and we believe Text2Video-Zero is a great research direction to unleash the zero-shot video generation and editing capacity of the amazing text-to-image models!
