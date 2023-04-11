@@ -12,11 +12,12 @@ from PIL import Image
 from annotator.util import resize_image, HWC3
 from annotator.canny import CannyDetector
 from annotator.openpose import OpenposeDetector
+from annotator.midas import MidasDetector
 import decord
-# decord.bridge.set_bridge('torch')
 
 apply_canny = CannyDetector()
 apply_openpose = OpenposeDetector()
+apply_midas = MidasDetector()
 
 
 def add_watermark(image, watermark_path, wm_rel_size=1/16, boundary=5):
@@ -49,6 +50,24 @@ def pre_process_canny(input_video, low_threshold=100, high_threshold=200):
         img = rearrange(frame, 'c h w -> h w c').cpu().numpy().astype(np.uint8)
         detected_map = apply_canny(img, low_threshold, high_threshold)
         detected_map = HWC3(detected_map)
+        detected_maps.append(detected_map[None])
+    detected_maps = np.concatenate(detected_maps)
+    control = torch.from_numpy(detected_maps.copy()).float() / 255.0
+    return rearrange(control, 'f h w c -> f c h w')
+
+
+def pre_process_depth(input_video, apply_depth_detect: bool = True):
+    detected_maps = []
+    for frame in input_video:
+        img = rearrange(frame, 'c h w -> h w c').cpu().numpy().astype(np.uint8)
+        img = HWC3(img)
+        if apply_depth_detect:
+            detected_map, _ = apply_midas(img)
+        else:
+            detected_map = img
+        detected_map = HWC3(detected_map)
+        H, W, C = img.shape
+        detected_map = cv2.resize(detected_map, (W, H), interpolation=cv2.INTER_NEAREST)
         detected_maps.append(detected_map[None])
     detected_maps = np.concatenate(detected_maps)
     control = torch.from_numpy(detected_maps.copy()).float() / 255.0
@@ -137,14 +156,15 @@ def prepare_video(video_path:str, resolution:int, device, dtype, normalize=True,
     _, h, w, _ = video.shape
     video = rearrange(video, "f h w c -> f c h w")
     video = torch.Tensor(video).to(device).to(dtype)
-    if h > w:
-        w = int(w * resolution / h)
-        w = w - w % 8
-        h = resolution - resolution % 8
-    else:
-        h = int(h * resolution / w)
-        h = h - h % 8
-        w = resolution - resolution % 8
+
+    # Use max if you want the larger side to be equal to resolution (e.g. 512)
+    # k = float(resolution) / min(h, w)
+    k = float(resolution) / max(h, w)
+    h *= k
+    w *= k
+    h = int(np.round(h / 64.0)) * 64
+    w = int(np.round(w / 64.0)) * 64
+
     video = Resize((h, w), interpolation=InterpolationMode.BILINEAR, antialias=True)(video)
     if normalize:
         video = video / 127.5 - 1.0

@@ -7,6 +7,7 @@ from app_pose import create_demo as create_demo_pose
 from app_text_to_video import create_demo as create_demo_text_to_video
 from app_pix2pix_video import create_demo as create_demo_pix2pix_video
 from app_canny_db import create_demo as create_demo_canny_db
+from app_depth import create_demo as create_demo_depth
 import argparse
 import os
 
@@ -63,6 +64,8 @@ with gr.Blocks(css='style.css') as demo:
         create_demo_canny(model)
     with gr.Tab('Edge Conditional and Dreambooth Specialized'):
         create_demo_canny_db(model)
+    with gr.Tab('Depth Conditional'):
+        create_demo_depth(model)
     '''
     '''
     gr.HTML(

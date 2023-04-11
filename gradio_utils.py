@@ -8,19 +8,19 @@ def edge_path_to_video_path(edge_path):
 
     vid_name = edge_path.split("/")[-1]
     if vid_name == "butterfly.mp4":
-        video_path = "__assets__/canny_videos_mp4_2fps/butterfly.mp4"
+        video_path = "__assets__/canny_videos_mp4/butterfly.mp4"
     elif vid_name == "deer.mp4":
-        video_path = "__assets__/canny_videos_mp4_2fps/deer.mp4"
+        video_path = "__assets__/canny_videos_mp4/deer.mp4"
     elif vid_name == "fox.mp4":
-        video_path = "__assets__/canny_videos_mp4_2fps/fox.mp4"
+        video_path = "__assets__/canny_videos_mp4/fox.mp4"
     elif vid_name == "girl_dancing.mp4":
-        video_path = "__assets__/canny_videos_mp4_2fps/girl_dancing.mp4"
+        video_path = "__assets__/canny_videos_mp4/girl_dancing.mp4"
     elif vid_name == "girl_turning.mp4":
-        video_path = "__assets__/canny_videos_mp4_2fps/girl_turning.mp4"
+        video_path = "__assets__/canny_videos_mp4/girl_turning.mp4"
     elif vid_name == "halloween.mp4":
-        video_path = "__assets__/canny_videos_mp4_2fps/halloween.mp4"
+        video_path = "__assets__/canny_videos_mp4/halloween.mp4"
     elif vid_name == "santa.mp4":
-        video_path = "__assets__/canny_videos_mp4_2fps/santa.mp4"
+        video_path = "__assets__/canny_videos_mp4/santa.mp4"
 
     assert os.path.isfile(video_path)
     return video_path

@@ -7,25 +7,25 @@ on_huggingspace = os.environ.get("SPACE_AUTHOR_NAME") == "PAIR"
 def create_demo(model: Model):
 
     examples = [
-        ["__assets__/canny_videos_edge/butterfly.mp4",
+        ["__assets__/depth_videos/butterfly.mp4",
             "white butterfly, a high-quality, detailed, and professional photo"],
-        ["__assets__/canny_videos_edge/deer.mp4",
+        ["__assets__/depth_videos/deer.mp4",
             "oil painting of a deer, a high-quality, detailed, and professional photo"],
-        ["__assets__/canny_videos_edge/fox.mp4",
+        ["__assets__/depth_videos/fox.mp4",
             "wild red fox is walking on the grass, a high-quality, detailed, and professional photo"],
-        ["__assets__/canny_videos_edge/girl_dancing.mp4",
+        ["__assets__/depth_videos/girl_dancing.mp4",
             "oil painting of a girl dancing close-up, masterpiece, a high-quality, detailed, and professional photo"],
-        ["__assets__/canny_videos_edge/girl_turning.mp4",
+        ["__assets__/depth_videos/girl_turning.mp4",
             "oil painting of a beautiful girl, a high-quality, detailed, and professional photo"],
-        ["__assets__/canny_videos_edge/halloween.mp4",
+        ["__assets__/depth_videos/halloween.mp4",
             "beautiful girl halloween style, a high-quality, detailed, and professional photo"],
-        ["__assets__/canny_videos_edge/santa.mp4",
+        ["__assets__/depth_videos/santa.mp4",
             "a santa claus, a high-quality, detailed, and professional photo"],
     ]
 
     with gr.Blocks() as demo:
         with gr.Row():
-            gr.Markdown('## Text and Canny-Edge Conditional Video Generation')
+            gr.Markdown('## Text and Depth Conditional Video Generation')
         with gr.Row():
             gr.HTML(
                 """
@@ -66,12 +66,12 @@ def create_demo(model: Model):
         gr.Examples(examples=examples,
                     inputs=inputs,
                     outputs=result,
-                    fn=model.process_controlnet_canny,
+                    fn=model.process_controlnet_depth,
                     cache_examples=on_huggingspace,
                     run_on_click=False,
                     )
 
-        run_button.click(fn=model.process_controlnet_canny,
+        run_button.click(fn=model.process_controlnet_depth,
                          inputs=inputs,
                          outputs=result,)
     return demo
