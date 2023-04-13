@@ -247,7 +247,7 @@ To directly call our text-to-video generator with depth control, run this python
 prompt = 'oil painting of a deer, a high-quality, detailed, and professional photo'
 video_path = '__assets__/depth_videos/deer.mp4'
 out_path = f'./text2video_depth_control_{prompt}.mp4'
-model.process_controlnet_canny(video_path, prompt=prompt, save_path=out_path)
+model.process_controlnet_depth(video_path, prompt=prompt, save_path=out_path)
 ```
 
 
