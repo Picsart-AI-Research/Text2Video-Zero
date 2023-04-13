@@ -362,10 +362,10 @@ For security information about public access we refer to the documentation of [g
 
 <table class="center">
 <tr>
-  <td><img src="__assets__/github/results/pose2v/img_bot_left.gif" raw=true><img src="__assets__/github/results/pose2v/pose_bot_left.gif"></td>
-  <td><img src="__assets__/github/results/pose2v/img_bot_right.gif" raw=true><img src="__assets__/github/results/pose2v/pose_bot_right.gif"></td>
-  <td><img src="__assets__/github/results/pose2v/img_top_left.gif" raw=true><img src="__assets__/github/results/pose2v/pose_top_left.gif"></td>
-  <td><img src="__assets__/github/results/pose2v/img_top_right.gif" raw=true><img src="__assets__/github/results/pose2v/pose_top_right.gif"></td>
+  <td><img src="__assets__/github/results/pose2v/img_bot_left_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/pose2v/img_bot_right_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/pose2v/img_top_left_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/pose2v/img_top_right_merged_with_input.gif" raw=true></td>
 </tr>
 <tr>
   <td width=25% align="center">"A bear dancing on the concrete"</td>
@@ -382,10 +382,10 @@ For security information about public access we refer to the documentation of [g
 
 <table class="center">
 <tr>
-  <td><img src="__assets__/github/results/edge2v/butterfly.gif" raw=true><img src="__assets__/github/results/edge2v/butterfly_edge.gif"></td>
-  <td><img src="__assets__/github/results/edge2v/head.gif" raw=true><img src="__assets__/github/results/edge2v/head_edge.gif"></td>
-  <td><img src="__assets__/github/results/edge2v/jelly.gif" raw=true><img src="__assets__/github/results/edge2v/jelly_edge.gif"></td>
-  <td><img src="__assets__/github/results/edge2v/mask.gif" raw=true><img src="__assets__/github/results/edge2v/mask_edge.gif"></td>
+  <td><img src="__assets__/github/results/edge2v/butterfly_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/edge2v/head_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/edge2v/jelly_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/edge2v/mask_merged_with_input.gif" raw=true></td>
 </tr>
 <tr>
   <td width=25% align="center">"White butterfly"</td>
@@ -395,10 +395,10 @@ For security information about public access we refer to the documentation of [g
 </tr>
 
 <tr>
-  <td><img src="__assets__/github/results/edge2v/fox.gif" raw=true><img src="__assets__/github/results/edge2v/fix_edge.gif"></td>
-  <td><img src="__assets__/github/results/edge2v/head_2.gif" raw=true><img src="__assets__/github/results/edge2v/head_2_edge.gif"></td>
-  <td><img src="__assets__/github/results/edge2v/santa.gif" raw=true><img src="__assets__/github/results/edge2v/santa_edge.gif"></td>
-  <td><img src="__assets__/github/results/edge2v/dear.gif" raw=true><img src="__assets__/github/results/edge2v/dear_edge.gif"></td>
+  <td><img src="__assets__/github/results/edge2v/fox_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/edge2v/head_2_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/edge2v/santa_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/edge2v/dear_merged_with_input.gif" raw=true></td>
 </tr>
 <tr>
   <td width=25% align="center">"Wild fox is walking"</td>
@@ -417,10 +417,10 @@ For security information about public access we refer to the documentation of [g
 
 <table class="center">
 <tr>
-  <td><img src="__assets__/github/results/canny_db/anime_style.gif" raw=true><img src="__assets__/github/results/canny_db/anime_edge.gif"></td>
-  <td><img src="__assets__/github/results/canny_db/arcane_style.gif" raw=true><img src="__assets__/github/results/canny_db/arcane_edge.gif"></td>
-  <td><img src="__assets__/github/results/canny_db/gta-5_man_style.gif" raw=true><img src="__assets__/github/results/canny_db/gta-5_man_edge.gif"></td>
-  <td><img src="__assets__/github/results/canny_db/img_bot_right.gif" raw=true><img src="__assets__/github/results/canny_db/edge_bot_right.gif"></td>
+  <td><img src="__assets__/github/results/canny_db/anime_style_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/canny_db/arcane_style_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/canny_db/gta-5_man_style_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/canny_db/img_bot_right_merged_with_input.gif" raw=true></td>
 </tr>
 <tr>
   <td width=25% align="center">"anime style"</td>
@@ -436,9 +436,9 @@ For security information about public access we refer to the documentation of [g
 
 <table class="center">
 <tr>
-  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/up_left.gif" raw=true><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/bot_left.gif"></td>
-  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/up_mid.gif" raw=true><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/bot_mid.gif"></td>
-  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/up_right.gif" raw=true><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/bot_right.gif"></td>
+  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/up_left_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/up_mid_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_1/up_right_merged_with_input.gif" raw=true></td>
 </tr>
 <tr>
   <td width=25% align="center">"Replace man with chimpanze"</td>
@@ -447,9 +447,9 @@ For security information about public access we refer to the documentation of [g
 </tr>
 
 <tr>
-  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/up_left.gif" raw=true><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/bot_left.gif"></td>
-  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/up_mid.gif" raw=true><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/bot_mid.gif"></td>
-  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/up_right.gif" raw=true><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/bot_right.gif"></td>
+  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/up_left_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/up_mid_merged_with_input.gif" raw=true></td>
+  <td><img src="__assets__/github/results/Video_InstructPix2Pix/frame_2/up_right_merged_with_input.gif" raw=true></td>
 </tr>
 <tr>
   <td width=25% align="center">"Make it Expressionism style"</td>
