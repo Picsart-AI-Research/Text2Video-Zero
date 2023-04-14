@@ -15,7 +15,7 @@ Roberto Henschel,
 [Zhangyang Wang](https://www.ece.utexas.edu/people/faculty/atlas-wang), Shant Navasardyan, [Humphrey Shi](https://www.humphreyshi.com)
 </br>
 
-[Paper](https://arxiv.org/abs/2303.13439) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) | [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/PAIR/Text2Video-Zero) | [Project](https://text2video-zero.github.io/)
+[Paper](https://arxiv.org/abs/2303.13439) | [Video](https://www.dropbox.com/s/uv90mi2z598olsq/Text2Video-Zero.MP4?dl=0) | [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/PAIR/Text2Video-Zero) | [Project](https://text2video-zero.github.io/) | [![Replicate](https://replicate.com/cjwbw/text2video-zero/badge)](https://replicate.com/cjwbw/text2video-zero)
 
 
 <p align="center">
