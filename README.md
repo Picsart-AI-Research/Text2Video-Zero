@@ -29,13 +29,14 @@ Roberto Henschel,
 
 * [03/23/2023] Paper [Text2Video-Zero](https://arxiv.org/abs/2303.13439) released!
 * [03/25/2023] The [first version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo (containing `zero-shot text-to-video generation` and  `Video Instruct Pix2Pix`) released!
-* [03/27/2023] The [full version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo released! Now also included: `text and pose conditional video generation`, `text and canny-edge conditional video generation`, and 
-`text, canny-edge and dreambooth conditional video generation`.
+* [03/27/2023] The [full version](https://huggingface.co/spaces/PAIR/Text2Video-Zero) of our huggingface demo released! Now also included: `text and pose conditional video generation`, `text and edge conditional video generation`, and 
+`text, edge and dreambooth conditional video generation`.
 * [03/28/2023] Code for all our generation methods released! We added a new low-memory setup. Minimum required GPU VRAM is currently **12 GB**. It will be further reduced in the upcoming releases. 
 * [03/29/2023] Improved [Huggingface demo](https://huggingface.co/spaces/PAIR/Text2Video-Zero)! (i) For text-to-video generation, **any base model for stable diffusion** and **any dreambooth model** hosted on huggingface can now be loaded! (ii) We improved the quality of Video Instruct-Pix2Pix. (iii) We added two longer examples for Video Instruct-Pix2Pix.   
 * [03/30/2023] New code released! It includes all improvements of our latest huggingface iteration. See the news update from `03/29/2023`. In addition, generated videos (text-to-video) can have **arbitrary length**. 
 * [04/06/2023] We integrated [Token Merging](https://github.com/dbolya/tomesd) into our code. When the highest compression is used and chunk size set to `2`, our code can run with **less than 7 GB VRAM**.  
 * [04/11/2023] New code and Huggingface demo released! We integrated **depth control**, based on [MiDaS](https://arxiv.org/pdf/1907.01341.pdf).
+* [04/13/2023] Our method has been integrad into 🧨 [Diffusers](https://huggingface.co/docs/diffusers/api/pipelines/text_to_video_zero)!
 
 ## Contribute
 We are on a journey to democratize AI and empower the creativity of everyone, and we believe Text2Video-Zero is a great research direction to unleash the zero-shot video generation and editing capacity of the amazing text-to-image models!
@@ -47,100 +48,52 @@ To achieve this goal, all contributions are welcome. Please check out these exte
 
 
 
+
+
+
 ## Setup
+
 
 
 1. Clone this repository and enter:
 
-```shell
+``` shell
 git clone https://github.com/Picsart-AI-Research/Text2Video-Zero.git
 cd Text2Video-Zero/
 ```
 2. Install requirements using Python 3.9 and CUDA >= 11.6
-```shell
+``` shell
 virtualenv --system-site-packages -p python3.9 venv
 source venv/bin/activate
 pip install -r requirements.txt
 ```
 
 
-<!--- Installing [xformers](https://github.com/facebookresearch/xformers) is highly recommended for more efficiency and speed on GPUs. 
-
-### Weights
-
-#### Text-To-Video with Pose Guidance
-
-Download the pose model weights used in [ControlNet](https://arxiv.org/abs/2302.05543):
-```shell
-wget -P annotator/ckpts https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/hand_pose_model.pth
-wget -P annotator/ckpts https://huggingface.co/lllyasviel/ControlNet/resolve/main/annotator/ckpts/body_pose_model.pth
-```
 
 
-<!---
-#### Text-To-Video
-Any [Stable Diffusion](https://arxiv.org/abs/2112.10752) v1.4 model weights in huggingface format can be used and must be placed in `models/text-to-video`.
-For instance:
-
-```shell
-git lfs install
-git clone https://huggingface.co/CompVis/stable-diffusion-v1-4 model_weights
-mv model_weights models/text-to-video
-```
-
-#### Video Instruct-Pix2Pix
-From [Instruct-Pix2Pix](https://arxiv.org/pdf/2211.09800.pdf) download pretrained model files:
-```shell
-git lfs install
-git clone https://huggingface.co/timbrooks/instruct-pix2pix models/instruct-pix2pix
-``` 
-
-#### Text-To-Video with Pose Guidance
-From [ControlNet](https://arxiv.org/abs/2302.05543), download the open pose model file:
-```shell
-mkdir -p models/control
-wget -P models/control https://huggingface.co/lllyasviel/ControlNet/resolve/main/models/control_sd15_openpose.pth
-```
-#### Text-To-Video with Edge Guidance
-From [ControlNet](https://arxiv.org/abs/2302.05543), download the Canny edge model file:
-```shell
-mkdir -p models/control
-wget -P models/control https://huggingface.co/lllyasviel/ControlNet/resolve/main/models/control_sd15_canny.pth 
-```
-
-
-### Weights
-
-
-#### Text-To-Video with Edge Guidance and Dreambooth
-
-
-
-We provide already prepared model files derived from CIVITAI for `anime` (keyword `1girl`), `arcane style` (keyword `arcane style`) `avatar` (keyword `avatar style`) and `gta-5 style`  (keyword `gtav style`). 
---->
-
-<!---
-To this end, download the model files from [google drive](https://drive.google.com/drive/folders/1uwXNjJ-4Ws6pqyjrIWyVPWu_u4aJrqt8?usp=share_link) and extract them into `models/control_db/`.
---->
+--- 
 
 
 
 ## Inference API
 
+
 To run inferences create an instance of `Model` class
-```python
+
+``` python
 import torch
 from model import Model
 
 model = Model(device = "cuda", dtype = torch.float16)
 ```
 
+
 ---
 
 
 ### Text-To-Video
 To directly call our text-to-video generator, run this python command which stores the result in `tmp/text2video/A_horse_galloping_on_a_street.mp4` :
-```python
+``` python
 prompt = "A horse galloping on a street"
 params = {"t0": 44, "t1": 47 , "motion_field_strength_x" : 12, "motion_field_strength_y" : 12, "video_length": 8}
 
@@ -149,7 +102,7 @@ model.process_text2video(prompt, fps = fps, path = out_path, **params)
 ```
 
 To use a different stable diffusion base model run this python command:
-```python
+``` python
 from hf_utils import get_model_list
 model_list = get_model_list()
 for idx, name in enumerate(model_list):
@@ -162,16 +115,17 @@ model.process_text2video(prompt, model_name = model_list[idx], fps = fps, path =
 #### Hyperparameters (Optional)
 
 You can define the following hyperparameters:
-* **Motion field strength**:   `motion_field_strength_x` = $\delta_x$  and `motion_field_strength_y` = $\delta_x$ (see our paper, Sect. 3.3.1). Default: `motion_field_strength_x=motion_field_strength_y= 12`.
+* **Motion field strength**:   `motion_field_strength_x` = $\delta_x$  and `motion_field_strength_y` = $\delta_y$ (see our paper, Sect. 3.3.1). Default: `motion_field_strength_x=motion_field_strength_y= 12`.
 * $T$ and $T'$ (see our paper, Sect. 3.3.1). Define values `t0` and `t1` in the range `{0,...,50}`. Default: `t0=44`, `t1=47` (DDIM steps). Corresponds to timesteps `881` and `941`, respectively. 
 * **Video length**: Define the number of frames `video_length` to be generated. Default: `video_length=8`.
 
 
 ---
 
+
 ### Text-To-Video with Pose Control
 To directly call our text-to-video generator with pose control, run this python command:
-```python
+``` python
 prompt = 'an astronaut dancing in outer space'
 motion_path = '__assets__/poses_skeleton_gifs/dance1_corr.mp4'
 out_path = f"./text2video_pose_guidance_{prompt.replace(' ','_')}.gif"
@@ -181,9 +135,11 @@ model.process_controlnet_pose(motion_path, prompt=prompt, save_path=out_path)
 
 ---
 
+
+
 ### Text-To-Video with Edge Control
 To directly call our text-to-video generator with edge control, run this python command:
-```python
+``` python
 prompt = 'oil painting of a deer, a high-quality, detailed, and professional photo'
 video_path = '__assets__/canny_videos_mp4/deer.mp4'
 out_path = f'./text2video_edge_guidance_{prompt}.mp4'
@@ -198,12 +154,13 @@ You can define the following hyperparameters for Canny edge detection:
 
 You can give hyperparameters as arguments to `model.process_controlnet_canny`
 
+
 ---
 
 
 ### Text-To-Video with Edge Guidance and Dreambooth specialization
 Load a dreambooth model then proceed as described in `Text-To-Video with Edge Guidance`
-```python
+``` python
 
 prompt = 'your prompt'
 video_path = 'path/to/your/video'
@@ -218,6 +175,9 @@ The value `video_path` can be the path to a `mp4` file. To use one of the exampl
 The value `dreambooth_model_path` can either be a link to a diffuser model file, or the name of one of the dreambooth models provided. To this end, set `dreambooth_model_path = "Anime DB"`, `dreambooth_model_path = "Avatar DB"`, `dreambooth_model_path = "GTA-5 DB"`, or `dreambooth_model_path = "Arcane DB"`.  The corresponding keywords are: `1girl` (for `Anime DB`), `arcane style` (for `Arcane DB`) `avatar style` (for `Avatar DB`) and `gtav style`  (for `GTA-5 DB`).
 
 
+#### Custom Dreambooth Models
+
+
 To load custom Dreambooth models, [transfer](https://github.com/lllyasviel/ControlNet/discussions/12) control to the custom model and  [convert](https://github.com/huggingface/diffusers/blob/main/scripts/convert_original_stable_diffusion_to_diffusers.py) it to diffuser format. Then, the value of `dreambooth_model_path` must link to the folder containing the diffuser file. Dreambooth models can be obtained, for instance, from [CIVITAI](https://civitai.com). 
 
 
@@ -229,7 +189,7 @@ To load custom Dreambooth models, [transfer](https://github.com/lllyasviel/Contr
 ### Video Instruct-Pix2Pix
 
 To perform pix2pix video editing, run this python command:
-```python
+``` python
 prompt = 'make it Van Gogh Starry Night'
 video_path = '__assets__/pix2pix video/camel.mp4'
 out_path = f'./video_instruct_pix2pix_{prompt}.mp4'
@@ -243,7 +203,7 @@ model.process_pix2pix(video_path, prompt=prompt, save_path=out_path)
 ### Text-To-Video with Depth Control
 
 To directly call our text-to-video generator with depth control, run this python command:
-```python
+``` python
 prompt = 'oil painting of a deer, a high-quality, detailed, and professional photo'
 video_path = '__assets__/depth_videos/deer.mp4'
 out_path = f'./text2video_depth_control_{prompt}.mp4'
@@ -251,7 +211,9 @@ model.process_controlnet_depth(video_path, prompt=prompt, save_path=out_path)
 ```
 
 
+
 ---
+
 
 
 
@@ -279,21 +241,36 @@ To replicate the ablation study, add additional parameters when calling the abov
 Note: Adding `smooth_bg=True` activates background smoothing. However, our  code does not include the salient object detector necessary to run that code.
 
 
+
+
 ---
 
+
+
 ## Inference using Gradio
+
+
+<details closed>
+<summary>Click to see details.</summary>
+
 From the project root folder, run this shell command:
-```shell
+``` shell
 python app.py
 ```
 
 Then access the app [locally](http://127.0.0.1:7860) with a browser.
 
 To access the app remotely, run this shell command:
-```shell
+``` shell
 python app.py --public_access
 ```
 For security information about public access we refer to the documentation of [gradio](https://gradio.app/sharing-your-app/#security-and-file-access).
+
+</details>
+
+
+
+---  
 
 
 
@@ -481,3 +458,64 @@ If you use our work in your research, please cite our publication:
     year={2023}
 }
 ```
+
+
+
+## Alternative ways to use Text2Video-Zero
+
+Text2Video-Zero can alternatively used via 
+
+* 🧨 [Diffusers](https://github.com/huggingface/diffusers) Library.
+
+<details closed>
+<summary>Click to see details.</summary>
+
+
+
+### Text2Video-Zero in 🧨 Diffusers Library
+
+Text2Video-Zero is [available](https://huggingface.co/docs/diffusers/api/pipelines/text_to_video_zero) in 🧨 Diffusers, starting from version `0.15.0`! 
+
+
+
+[Diffusers](https://github.com/huggingface/diffusers) can be installed using the following command:
+
+
+``` shell
+virtualenv --system-site-packages -p python3.9 venv
+source venv/bin/activate
+pip install diffusers torch imageio
+```
+
+
+To generate a video from a text prompt, run the following command:
+
+``` python
+import torch
+import imageio
+from diffusers import TextToVideoZeroPipeline
+
+# load stable diffusion model weights
+model_id = "runwayml/stable-diffusion-v1-5"
+
+# create a TextToVideoZero pipeline
+pipe = TextToVideoZeroPipeline.from_pretrained(model_id, torch_dtype=torch.float16).to("cuda")
+
+# define the text prompt
+prompt = "A panda is playing guitar on times square"
+
+# generate the video using our pipeline
+result = pipe(prompt=prompt).images
+result = [(r * 255).astype("uint8") for r in result]
+
+# save the resulting image
+imageio.mimsave("video.mp4", result, fps=4)
+```
+
+
+For more information, including how to run `text and pose conditional video generation`, `text and edge conditional video generation` and `text and edge and dreambooth conditional video generation`, please check the [documentation](https://huggingface.co/docs/diffusers/api/pipelines/text_to_video_zero).  
+
+
+
+</details>
+
