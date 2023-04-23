@@ -176,7 +176,7 @@ class Model:
         added_prompt = 'best quality, extremely detailed'
         negative_prompts = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, fewer digits, cropped, worst quality, low quality'
 
-        video, fps = utils.prepare_image(
+        video, fps = utils.prepare_video(
             video_path, resolution, self.device, self.dtype, False)
         control = utils.pre_process_canny(
             video, low_threshold, high_threshold).to(self.device).to(self.dtype)
