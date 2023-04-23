@@ -4,7 +4,7 @@ import PIL.Image
 import numpy as np
 import torch
 import torchvision
-from torchvision.transforms import Resize, InterpolationMode
+from torchvision.transforms import Resize, InterpolationMode, ToTensor
 import imageio
 from einops import rearrange
 import cv2
@@ -47,8 +47,11 @@ def add_watermark(image, watermark_path, wm_rel_size=1/16, boundary=5):
 def pre_process_canny(input_video, low_threshold=100, high_threshold=200):
     detected_maps = []
     for frame in input_video:
+        print(frame)
         img = rearrange(frame, 'c h w -> h w c').cpu().numpy().astype(np.uint8)
+        print(img)
         detected_map = apply_canny(img, low_threshold, high_threshold)
+        print(detected_map)
         detected_map = HWC3(detected_map)
         detected_maps.append(detected_map[None])
     detected_maps = np.concatenate(detected_maps)
@@ -170,6 +173,78 @@ def prepare_video(video_path:str, resolution:int, device, dtype, normalize=True,
         video = video / 127.5 - 1.0
     return video, output_fps
 
+def prepare_images(video_path:str, resolution:int, device, dtype, normalize=True, start_t:float=0, end_t:float=-1, output_fps:int=-1):
+    directory = video_path
+    filenames = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
+    videos = []
+    for fn in filenames:
+        frame = Image.open(os.path.join(directory, fn))
+        convert_tensor = ToTensor()
+        video = convert_tensor(frame)
+        #video = video * 255
+        videos.append(frame)
+    
+    video = torch.FloatTensor(videos)
+    if torch.is_tensor(video):
+        video = video.detach().cpu().numpy()
+    else:
+        video = video.asnumpy()
+
+    print(video.shape)
+    video = np.expand_dims(video, 0)
+    print(video.shape)
+
+    _, _, h, w = video.shape
+    #video = rearrange(video, "f c h w -> f c h w")
+    video = torch.Tensor(video).to(device).to(dtype)
+
+    # Use max if you want the larger side to be equal to resolution (e.g. 512)
+    # k = float(resolution) / min(h, w)
+    k = float(resolution) / max(h, w)
+    h *= k
+    w *= k
+    h = int(np.round(h / 64.0)) * 64
+    w = int(np.round(w / 64.0)) * 64
+
+    video = Resize((h, w), interpolation=InterpolationMode.BILINEAR, antialias=True)(video)
+    if normalize:
+        video = video / 127.5 - 1.0
+    return video, output_fps
+
+
+def prepare_image(video_path:str, resolution:int, device, dtype, normalize=True, start_t:float=0, end_t:float=-1, output_fps:int=-1):
+    video = Image.open(video_path)
+    convert_tensor = ToTensor()
+    video = convert_tensor(video)
+    video = video * 255
+    print(video.shape)
+
+    if torch.is_tensor(video):
+        video = video.detach().cpu().numpy()
+    else:
+        video = video.asnumpy()
+
+    print(video.shape)
+    video = np.expand_dims(video, 0)
+    print(video.shape)
+
+    _, _, h, w = video.shape
+    #video = rearrange(video, "f c h w -> f c h w")
+    video = torch.Tensor(video).to(device).to(dtype)
+
+    # Use max if you want the larger side to be equal to resolution (e.g. 512)
+    # k = float(resolution) / min(h, w)
+    k = float(resolution) / max(h, w)
+    h *= k
+    w *= k
+    h = int(np.round(h / 64.0)) * 64
+    w = int(np.round(w / 64.0)) * 64
+
+    video = Resize((h, w), interpolation=InterpolationMode.BILINEAR, antialias=True)(video)
+    if normalize:
+        video = video / 127.5 - 1.0
+    return video, output_fps
+
 
 def post_process_gif(list_of_results, image_resolution):
     output_file = "/tmp/ddxk.gif"
@@ -200,6 +275,7 @@ class CrossFrameAttnProcessor:
         value = attn.to_v(encoder_hidden_states)
         # Sparse Attention
         if not is_cross_attention:
+            print("NOT CROSS")
             video_length = key.size()[0] // self.unet_chunk_size
             # former_frame_index = torch.arange(video_length) - 1
             # former_frame_index[0] = 0
