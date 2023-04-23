@@ -274,7 +274,6 @@ class CrossFrameAttnProcessor:
         value = attn.to_v(encoder_hidden_states)
         # Sparse Attention
         if not is_cross_attention:
-            print("NOT CROSS")
             video_length = key.size()[0] // self.unet_chunk_size
             # former_frame_index = torch.arange(video_length) - 1
             # former_frame_index[0] = 0
