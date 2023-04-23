@@ -611,7 +611,7 @@ class Model:
                                  use_cf_attn=True,
                                  save_path=None):
         print("Module Canny")
-        video_path = gradio_utils.edge_path_to_video_path(video_path)
+        #video_path = gradio_utils.edge_path_to_video_path(video_path)
         if self.model_type != ModelType.ControlNetCanny:
             controlnet = ControlNetModel.from_pretrained(
                 "lllyasviel/sd-controlnet-canny")

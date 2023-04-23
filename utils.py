@@ -175,6 +175,7 @@ def prepare_video(video_path:str, resolution:int, device, dtype, normalize=True,
 
 def prepare_images(video_path:str, resolution:int, device, dtype, normalize=True, start_t:float=0, end_t:float=-1, output_fps:int=-1):
     directory = video_path
+    print(os.listdir(directory))
     filenames = [f for f in os.listdir(directory) if os.path.isfile(os.path.join(directory, f))]
     videos = []
     for fn in filenames:
@@ -182,16 +183,14 @@ def prepare_images(video_path:str, resolution:int, device, dtype, normalize=True
         convert_tensor = ToTensor()
         video = convert_tensor(frame)
         #video = video * 255
-        videos.append(frame)
-    
-    video = torch.FloatTensor(videos)
+        videos.append(video)
+    video = np.array([tensor.numpy() for tensor in videos])
     if torch.is_tensor(video):
         video = video.detach().cpu().numpy()
     else:
-        video = video.asnumpy()
+        print("COMMENTED OUT!")
+        #video = video.asnumpy()
 
-    print(video.shape)
-    video = np.expand_dims(video, 0)
     print(video.shape)
 
     _, _, h, w = video.shape
@@ -209,7 +208,7 @@ def prepare_images(video_path:str, resolution:int, device, dtype, normalize=True
     video = Resize((h, w), interpolation=InterpolationMode.BILINEAR, antialias=True)(video)
     if normalize:
         video = video / 127.5 - 1.0
-    return video, output_fps
+    return video, 1
 
 
 def prepare_image(video_path:str, resolution:int, device, dtype, normalize=True, start_t:float=0, end_t:float=-1, output_fps:int=-1):
