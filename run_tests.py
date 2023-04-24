@@ -43,13 +43,17 @@ def images_to_video_new(input_dir, output_path, fps=30):
     # Write the clip to a video file
     clip.write_videofile(output_path, fps=fps, codec='libx264')
 
-video_path = '__assets__/canny_videos_mp4/deer_pic.jpeg'
-prompt = "Deer walking in the street"
-params = {"t0": 44, "t1": 47 , "motion_field_strength_x" : 12, "motion_field_strength_y" : 12, "video_length": 2}
+def video2video(input_path, output_path, prompt):
+    model = Model(device = "cuda", dtype = torch.float16)
+    model.process_controlnet_canny(input_path, prompt=prompt, save_path=output_path)
+
+#video_path = 'vid2vid/__assets__/canny_videos_mp4/deer_pic.jpeg'
+#prompt = "Deer walking in the street"
+#params = {"t0": 44, "t1": 47 , "motion_field_strength_x" : 12, "motion_field_strength_y" : 12, "video_length": 2}
 
 prompt = 'oil painting of a deer, a high-quality, detailed, and professional photo'
 images_to_video_new('__assets__/frames', '__assets__/canny_videos_mp4/myvideo_new.mp4', 1)
-video_path = '__assets__/canny_videos_mp4/myvideo_new.mp4'
-out_path = f'./final_{prompt}.mp4'
+video_path = '__assets__/canny_videos_mp4/interski.mp4'
+out_path = f'./new_final_{prompt}.mp4'
 model.process_controlnet_canny(video_path, prompt=prompt, save_path=out_path)
 

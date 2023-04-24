@@ -188,7 +188,7 @@ class Model:
         self.generator.manual_seed(seed)
         latents = torch.randn((1, 4, h//8, w//8), dtype=self.dtype,
                               device=self.device, generator=self.generator)
-        latents = latents.repeat(3, 1, 1, 1)
+        latents = latents.repeat(f, 1, 1, 1)
         result = self.inference(image=control,
                                 prompt=prompt + ', ' + added_prompt,
                                 height=h,
