@@ -145,7 +145,7 @@ class Model:
     def process_controlnet_canny(self,
                                  video_path,
                                  prompt,
-                                 chunk_size=8,
+                                 chunk_size=2,
                                  watermark='Picsart AI Research',
                                  merging_ratio=0.0,
                                  num_inference_steps=20,
