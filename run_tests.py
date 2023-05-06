@@ -3,8 +3,13 @@ from model import Model
 import cv2
 import os
 from moviepy.editor import ImageSequenceClip
+import argparse
 
-model = Model(device = "cuda", dtype = torch.float16)
+arg_parser = argparse.ArgumentParser(description="Video-to-video with custom prompt")
+arg_parser.add_argument('--prompt', type=str, required=True, help="The prompt for the video generation")
+args = arg_parser.parse_args()
+
+model = Model(device="cuda", dtype=torch.float16)
 
 
 def images_to_video(input_dir, output_path, fps=30):
@@ -51,9 +56,9 @@ def video2video(input_path, output_path, prompt):
 #prompt = "Deer walking in the street"
 params = {"t0": 44, "t1": 47 , "motion_field_strength_x" : 12, "motion_field_strength_y" : 12, "video_length": 2}
 
-prompt = 'A realistic basketball falling.'
-images_to_video_new('../rife-interop/vid_out', 'output_vid/o.mp4', 1)
-video_path = 'output_vid/o.mp4'
-out_path = 'output_vid/output.mp4'
+prompt = args.prompt
+images_to_video_new('__assets__/frames', '__assets__/canny_videos_mp4/kayak_draw.mp4', 1)
+video_path = 'big_deer_16X_20fps.mp4'
+out_path = f'./deer_over_hole.mp4'
 model.process_controlnet_canny(video_path, prompt=prompt, save_path=out_path)
 
