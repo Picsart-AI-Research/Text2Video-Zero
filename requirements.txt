@@ -11,7 +11,7 @@ imageio==2.9.0
 imageio-ffmpeg==0.4.2
 invisible-watermark>=0.1.5
 moviepy==1.0.3
-numpy==1.24.1
+numpy<1.24
 omegaconf==2.3.0
 open_clip_torch==2.16.0
 opencv_python==4.7.0.72
